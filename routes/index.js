@@ -9,6 +9,7 @@ const login = require('./userSet/login')
 const restaurant = require('./restaurant/restaurant') 
 const userEdit = require("./userSet/userEdit")
 const google = require("./auth/log_google")
+const facebook = require("./auth/log_fb")
 const { routes } = require('../app')
 
 router.use(bodyParser.json())
@@ -16,15 +17,16 @@ router.use(bodyParser.urlencoded({
     extended: true
     }))
 
-// router.get('/',(req,res)=>{
-//     res.status(200).send("siema kut...")
-// })
-router.use('/',google)
+router.get('/',(req,res)=>{
+    res.status(200).send("siema kut...")
+})
+
 
 
 router.use('/dupa', (req,res)=>res.send("chuj dupa"))
 router.use('/login', login)
 router.use('/google', google)
+router.use('/fb', facebook)
 router.use('/restaurant', restaurant)
 router.use('/user', userEdit)
 

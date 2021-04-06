@@ -34,13 +34,13 @@ router.use(passport.session());
 router.get('/', (req,res) => res.send("You aren't logged in"))
 router.get('/good', isLogin, (req,res) => res.send(`no elo ${req.user.displayName}`))
 
-router.get('/google',
+router.get('/login',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/failed' }),
+router.get('/login/callback', passport.authenticate('google', { failureRedirect: '/failed' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/good');
+    res.redirect('/google/good');
   });
 
 router.get('/logout',(req,res) =>{
