@@ -35,7 +35,7 @@ router.get('/', (req,res) => res.send("You aren't logged in"))
 router.get('/good', isLogin, (req,res) => res.send(`no elo ${req.user.displayName}`))
 
 router.get('/login',
-  passport.authenticate('google', { scope: ['profile', 'email'] }));
+  passport.authenticate('google', { scope: [' '] }));
 
 router.get('/login/callback', passport.authenticate('google', { failureRedirect: '/failed' }),
   function(req, res) {

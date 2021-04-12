@@ -40,7 +40,7 @@ app.get('/postgres',async (req,res)=>{
 
 app.get('/postgres/:id',async (req,res)=>{
     try {
-        const result =await db.query("SELECT * FROM users WHERE id=$1",[req.params.id])
+        const result = await db.query("SELECT * FROM users WHERE id=$1",[req.params.id])
         console.log(result.rows)
         res.status(200).json({
         status: "success",
