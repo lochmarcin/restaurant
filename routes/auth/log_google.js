@@ -5,49 +5,73 @@ const bodyParser = require("body-parser")
 const passport = require("passport")
 const cookieSession = require('cookie-session')
 require('./passport-setup')
+const db = require("../../db")
+
 
 router.use(cors())
 
 router.use(bodyParser.urlencoded({
-    extended: true
+  extended: true
 }))
 
 router.use(bodyParser.json())
 
 router.use(cookieSession({
-    name: 'g-session',
-    keys: ['key1', 'key2']
-  }))
+  name: 'g-session',
+  keys: ['key1', 'key2']
+}))
 
-const isLogin = (req,res,next) => {
-    if(req.user)
-        next()
-    else{
-        res.sendStatus(401)
-    }
-} 
+const isLogin = (req, res, next) => {
+  if (req.user)
+    next()
+  else {
+    res.sendStatus(401)
+  }
+}
 
 
 router.use(passport.initialize());
 router.use(passport.session());
 
-router.get('/', (req,res) => res.send("You aren't logged in"))
-router.get('/good', isLogin, (req,res) => res.send(`no elo ${req.user.displayName}`))
+router.get('/', (req, res) => res.send("You aren't logged in"))
+router.get('/good', isLogin, (req, res) => {
+  res.send(`no elo ${req.user.id}, ${req.user.displayName}, ${req.user.emails[0].value}`)
+  // console.log(req.user)
+}
+)
 
 router.get('/login',
-  passport.authenticate('google', { scope: [' '] }));
+  passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/login/callback', passport.authenticate('google', { failureRedirect: '/failed' }),
-  function(req, res) {
+  function (req, res) {
     // Successful authentication, redirect home.
+    add_user_db(req.user.id, req.user.displayName, req.user.emails[0].value)
     res.redirect('/google/good');
   });
 
-router.get('/logout',(req,res) =>{
-    req.session=null
-    req.logOut()
-    res.redirect('/')
+router.get('/logout', (req, res) => {
+  req.session = null
+  req.logOut()
+  res.redirect('/')
 })
+
+
+async function add_user_db(google_id, name, email) {
+  try {
+    const result = await db.query("INSERT INTO users (google_id, name, email) VALUES ($1, $2, $3)", [google_id, name, email])
+    console.log(result.rows)
+    res.status(200).json({
+      status: "success",
+      results: result.rows.length,
+      data: {
+        users: result.rows,
+      }
+    })
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 
 module.exports = router
