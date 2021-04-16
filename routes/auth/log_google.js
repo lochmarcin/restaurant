@@ -44,10 +44,21 @@ router.get('/login',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/login/callback', passport.authenticate('google', { failureRedirect: '/failed' }),
-  function (req, res) {
+  async function (req, res) {
     // Successful authentication, redirect home.
-    add_user_db(req.user.id, req.user.displayName, req.user.emails[0].value)
-    res.redirect('/google/good');
+    try {
+      const result = await db.query("INSERT INTO users (google_id, name, email) VALUES ($1, $2, $3) returning *", [req.user.id, req.user.displayName, req.user.emails[0].value])
+      console.log(result.rows)
+      res.status(201).json({
+        status: "success",
+        data: {
+          users: result.rows[0],
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
+    redirect('/google/good')
   });
 
 router.get('/logout', (req, res) => {
@@ -57,21 +68,23 @@ router.get('/logout', (req, res) => {
 })
 
 
-async function add_user_db(google_id, name, email) {
-  try {
-    const result = await db.query("INSERT INTO users (google_id, name, email) VALUES ($1, $2, $3)", [google_id, name, email])
-    console.log(result.rows)
-    res.status(200).json({
-      status: "success",
-      results: result.rows.length,
-      data: {
-        users: result.rows,
-      }
-    })
-  } catch (err) {
-    console.log(err)
-  }
-}
+// async function add_user_db(google_id, name, email, res) {
+//   try {
+//     const result = await db.query("INSERT INTO users (google_id, name, email) VALUES ($1, $2, $3)", [google_id, name, email])
+//     console.log(result.rows)
+//     res.status(200).json({
+//       status: "success",
+//       results: result.rows.length,
+//       data: {
+//         users: result.rows,
+//       }
+//     })
+
+//     return result.rows
+//   } catch (err) {
+//     console.log(err)
+//   }
+// }
 
 
 module.exports = router
