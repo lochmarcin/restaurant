@@ -49,7 +49,7 @@ router.get('/login/callback', passport.authenticate('google', { failureRedirect:
     try {
       const result = await db.query("INSERT INTO users (google_id, name, email) VALUES ($1, $2, $3) returning *", [req.user.id, req.user.displayName, req.user.emails[0].value])
       console.log(result.rows)
-      res.status(201).json({
+      res.status(200).json({
         status: "success",
         data: {
           users: result.rows[0],
@@ -58,7 +58,6 @@ router.get('/login/callback', passport.authenticate('google', { failureRedirect:
     } catch (err) {
       console.log(err)
     }
-    redirect('/google/good')
   });
 
 router.get('/logout', (req, res) => {
