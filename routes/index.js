@@ -30,9 +30,6 @@ router.use('/fb', facebook)
 router.use('/restaurant', restaurant)
 router.use('/user', userEdit)
 
-// router.post('/chuj', (req,res)=>{
-//     res.send(req.body)
-// })
 
 
 module.exports = router

@@ -37,24 +37,39 @@ router.get('/', (req, res) => res.send("You aren't logged in"))
 router.get('/good', isLogin, (req, res) => {
   res.send(`no elo ${req.user.id}, ${req.user.displayName}, ${req.user.emails[0].value}`)
   // console.log(req.user)
-}
-)
+})
 
 router.get('/login',
-  passport.authenticate('google', { scope: ['profile', 'email'] }));
+  passport.authenticate('google', {
+    scope: ['profile', 'email']
+  }));
 
-router.get('/login/callback', passport.authenticate('google', { failureRedirect: '/failed' }),
+router.get('/login/callback', passport.authenticate('google', {
+    failureRedirect: '/failed'
+  }),
   async function (req, res) {
     // Successful authentication, redirect home.
     try {
-      const result = await db.query("INSERT INTO users (google_id, name, email) VALUES ($1, $2, $3) returning *", [req.user.id, req.user.displayName, req.user.emails[0].value])
-      console.log(result.rows)
-      res.status(200).json({
-        status: "success",
-        data: {
-          users: result.rows[0],
-        }
-      })
+      let result = await db.query("SELECT * FROM users WHERE google_id=$1", [req.user.id])
+      if (result.rows[0] == null) {
+        result = await db.query("INSERT INTO users (google_id, name, email) VALUES ($1, $2, $3) returning *", [req.user.id, req.user.displayName, req.user.emails[0].value])
+        console.log(result.rows)
+        res.status(200).json({
+          status: "success",
+          data: {
+            users: result.rows[0],
+          }
+        })
+      } else {
+        console.log("User exist")
+        res.status(200).json({
+          status: "warning",
+          message: "User exist",
+          data: {
+            users: result.rows[0],
+          }
+        })
+      }
     } catch (err) {
       console.log(err)
     }
@@ -67,23 +82,6 @@ router.get('/logout', (req, res) => {
 })
 
 
-// async function add_user_db(google_id, name, email, res) {
-//   try {
-//     const result = await db.query("INSERT INTO users (google_id, name, email) VALUES ($1, $2, $3)", [google_id, name, email])
-//     console.log(result.rows)
-//     res.status(200).json({
-//       status: "success",
-//       results: result.rows.length,
-//       data: {
-//         users: result.rows,
-//       }
-//     })
-
-//     return result.rows
-//   } catch (err) {
-//     console.log(err)
-//   }
-// }
 
 
 module.exports = router

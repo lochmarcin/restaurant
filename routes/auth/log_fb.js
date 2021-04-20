@@ -58,22 +58,21 @@ router.get('/login/secrets',
       if (result.rows[0]==null) {
         result = await db.query("INSERT INTO users (name, email, fb_id) VALUES ($1, $2, $3) returning *", [req.user.displayName, req.user.email, req.user.id])
         console.log(result.rows)
-        res.write.status(200).json({
+        res.status(200).json({
           status: "success",
           data: {
             users: result.rows[0],
           }
         })
-        res.write.redirect("/fb/good")
-        res.end()
       } else {
         console.log("User exist")
-        res.write().status(200).json({
+        res.status(200).json({
           status: "warning",
-          message: "User exist"
+          message: "User exist",
+          data: {
+            users: result.rows[0],
+          }
         })
-        res.write().redirect("/fb/good")
-        res.end()
       }
     } catch (err) {
       console.log(err)
