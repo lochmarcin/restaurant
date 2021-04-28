@@ -26,6 +26,21 @@ router.get('/getAll', async (req, res) => {
         console.log(err)
     }
 })
+router.get('/getAll/:city', async (req, res) => {
+    console.log(req.body)
+    try {
+        const result = await db.query("SELECT * FROM restaurant WHERE city=$1",[req.params.city])
+        console.log(result.rows)
+        res.status(200).json({
+            status: "success",
+            data: {
+                restaurant: result.rows,
+            }
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 router.get('/get/:user_id', async (req, res) => {
     console.log(req.body)
