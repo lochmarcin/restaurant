@@ -6,7 +6,7 @@ const {use} = require("passport")
 
 
 const login = require('./userSet/login') 
-const restaurant = require('./restaurant/restaurant') 
+const restaurant = require('./endpoints/restaurant') 
 const userEdit = require("./userSet/userEdit")
 const google = require("./auth/log_google")
 const facebook = require("./auth/log_fb")
