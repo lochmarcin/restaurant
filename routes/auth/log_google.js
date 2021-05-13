@@ -44,42 +44,47 @@ router.get('/login',
     scope: ['profile', 'email']
   }));
 
-router.get('/login/callback', passport.authenticate('google', {
-    failureRedirect: '/failed'
-  }),
-  async function (req, res) {
-    // Successful authentication, redirect home.
-    try {
-      let result = await db.query("SELECT * FROM users WHERE google_id=$1", [req.user.id])
-      if (result.rows[0] == null) {
-        result = await db.query("INSERT INTO users (google_id, name, email) VALUES ($1, $2, $3) returning *", [req.user.id, req.user.displayName, req.user.emails[0].value])
-        console.log(result.rows)
-        res.status(200).json({
-          status: "success",
-          data: {
-            users: result.rows[0],
-          }
-        })
-      } else {
-        console.log("User exist")
-        res.status(200).json({
-          status: "warning",
-          message: "User exist",
-          data: {
-            users: result.rows[0],
-          }
-        })
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  });
+// router.get('/login',
+//   passport.authenticate('google', {
+//     scope: ['profile', 'email']
+//   }));
 
-router.get('/logout', (req, res) => {
-  req.session = null
-  req.logOut()
-  res.redirect('/')
-})
+// router.get('/login/callback', passport.authenticate('google', {
+//     failureRedirect: '/failed'
+//   }),
+//   async function (req, res) {
+//     // Successful authentication, redirect home.
+//     try {
+//       let result = await db.query("SELECT * FROM users WHERE google_id=$1", [req.user.id])
+//       if (result.rows[0] == null) {
+//         result = await db.query("INSERT INTO users (google_id, name, email) VALUES ($1, $2, $3) returning *", [req.user.id, req.user.displayName, req.user.emails[0].value])
+//         console.log(result.rows)
+//         res.status(200).json({
+//           status: "success",
+//           data: {
+//             users: result.rows[0],
+//           }
+//         })
+//       } else {
+//         console.log("User exist")
+//         res.status(200).json({
+//           status: "warning",
+//           message: "User exist",
+//           data: {
+//             users: result.rows[0],
+//           }
+//         })
+//       }
+//     } catch (err) {
+//       console.log(err)
+//     }
+//   });
+
+// router.get('/logout', (req, res) => {
+//   req.session = null
+//   req.logOut()
+//   res.redirect('/')
+// })
 
 
 
