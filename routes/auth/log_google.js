@@ -39,10 +39,10 @@ router.get('/good', isLogin, (req, res) => {
   // console.log(req.user)
 })
 
-router.get('/login',
-  passport.authenticate('google', {
-    scope: ['profile', 'email']
-  }));
+router.get('/login', (req,res) => {
+  console.log(req.body)
+  res.status(200).send('otrzymałem :' + req.body)
+})
 
 // router.get('/login',
 //   passport.authenticate('google', {
