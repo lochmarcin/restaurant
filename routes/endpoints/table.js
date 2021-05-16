@@ -99,8 +99,8 @@ router.put('/update/:id ', async (req, res) => {
 
 // CREATE TABLE    CREATE TABLE    
 router.post('/create', upload.single('image'), async (req, res) => {
-    console.log('file', req.body)
-    console.log('body', req.file)
+    console.log('body', req.body)
+    console.log('file', req.file)
         
     const image = await imageProcess(req)
     console.log(image)
