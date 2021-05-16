@@ -39,7 +39,7 @@ router.get('/good', isLogin, (req, res) => {
   // console.log(req.user)
 })
 
-router.get('/login', (req,res) => {
+router.post('/login', (req,res) => {
   console.log(req.body)
   res.status(200).send('otrzymałem :' + req.body)
 })

@@ -16,53 +16,55 @@ app.use(cors({
     credentials: true
 }))
 
+app.use(express.static('uploads'))
+
 const port = process.env.PORT || 5000
 app.listen(port, () => console.log(`Serwer działa na porcie ${port}`))
 
 
-// app.use('/login', login)
+// // app.use('/login', login)
 
-app.get('/postgres',async (req,res)=>{
-    try {
-        const result =await db.query("SELECT * FROM users")
-        console.log(result)
-        res.status(200).json({
-        status: "success",
-        results: result.rows.length,
-        data: {
-            users: result.rows,
-        }
-    })
-    } catch (err) {
-        console.log(err)
-    }
-})
+// app.get('/postgres',async (req,res)=>{
+//     try {
+//         const result =await db.query("SELECT * FROM users")
+//         console.log(result)
+//         res.status(200).json({
+//         status: "success",
+//         results: result.rows.length,
+//         data: {
+//             users: result.rows,
+//         }
+//     })
+//     } catch (err) {
+//         console.log(err)
+//     }
+// })
 
-app.get('/postgres/:id',async (req,res)=>{
-    try {
-        const result = await db.query("SELECT * FROM users WHERE id=$1",[req.params.id])
-        console.log(result.rows)
-        res.status(200).json({
-        status: "success",
-        results: result.rows.length,
-        data: {
-            users: result.rows,
-        }
-    })
-    } catch (err) {
-        console.log(err)
-    }
-})
-
-
-const connection_url= `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.hsckl.mongodb.net/<dbname>?retryWrites=true&w=majority`
-
-mongoose.connect(connection_url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}, () => {
-    console.log("Mongoose Is Connected")
-})
+// app.get('/postgres/:id',async (req,res)=>{
+//     try {
+//         const result = await db.query("SELECT * FROM users WHERE id=$1",[req.params.id])
+//         console.log(result.rows)
+//         res.status(200).json({
+//         status: "success",
+//         results: result.rows.length,
+//         data: {
+//             users: result.rows,
+//         }
+//     })
+//     } catch (err) {
+//         console.log(err)
+//     }
+// })
 
 
-// app.get("/",(req,res)=> res.status(200).send("No hej!"))
+// const connection_url= `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.hsckl.mongodb.net/<dbname>?retryWrites=true&w=majority`
+
+// mongoose.connect(connection_url, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+// }, () => {
+//     console.log("Mongoose Is Connected")
+// })
+
+
+// // app.get("/",(req,res)=> res.status(200).send("No hej!"))
