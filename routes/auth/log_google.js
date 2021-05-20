@@ -56,6 +56,15 @@ router.post("/api/v1/auth/google", async (req, res) => {
     audience: process.env.CLIENT_ID
   });
   const { name, email, picture } = ticket.getPayload();
+  // moje
+  try {
+    let result = db.query("SELECT * FROM users WHERE google_id=$1", [req.user.id])
+    if (result.rows[0] == null)
+  } catch (error) {
+
+  }
+
+  //
   const user = await db.user.upsert({
     where: { email: email },
     update: { name, picture },
@@ -80,11 +89,6 @@ router.delete("/api/v1/auth/logout", async (req, res) => {
   })
 })
 
-
-router.post('/login', (req, res) => {
-  console.log(req.body)
-  res.status(200).send('otrzymałem :' + req.body)
-})
 
 // router.get('/login',
 //   passport.authenticate('google', {
