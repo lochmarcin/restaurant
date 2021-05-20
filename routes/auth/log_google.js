@@ -7,6 +7,9 @@ const cookieSession = require('cookie-session')
 require('./passport-setup')
 const db = require("../../db")
 
+const { OAuth2Client } = require('google-auth-library')
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+
 
 router.use(cors())
 
@@ -33,13 +36,52 @@ const isLogin = (req, res, next) => {
 router.use(passport.initialize());
 router.use(passport.session());
 
+router.use(async (req, res, next) => {
+  const user = await db.user.findFirst({ where: { id: req.session.userId } })
+  req.user = user
+  next()
+})
+
+
 router.get('/', (req, res) => res.send("You aren't logged in"))
 router.get('/good', isLogin, (req, res) => {
   res.send(`no elo ${req.user.id}, ${req.user.displayName}, ${req.user.emails[0].value}`)
   // console.log(req.user)
 })
 
-router.post('/login', (req,res) => {
+router.post("/api/v1/auth/google", async (req, res) => {
+  const { token } = req.body
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: process.env.CLIENT_ID
+  });
+  const { name, email, picture } = ticket.getPayload();
+  const user = await db.user.upsert({
+    where: { email: email },
+    update: { name, picture },
+    create: { name, email, picture }
+  })
+  req.session.userId = user.id
+
+  res.status(201)
+  res.json(user)
+})
+
+router.get("/me", async (req, res) => {
+  res.status(200)
+  res.json(req.user)
+})
+
+router.delete("/api/v1/auth/logout", async (req, res) => {
+  await req.session.destroy()
+  res.status(200)
+  res.json({
+    message: "Logged out successfully"
+  })
+})
+
+
+router.post('/login', (req, res) => {
   console.log(req.body)
   res.status(200).send('otrzymałem :' + req.body)
 })
