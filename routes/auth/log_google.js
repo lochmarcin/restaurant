@@ -37,10 +37,14 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 router.use(async (req, res, next) => {
-  const user = await db.query("SELECT * FROM users WHERE id=$1 returning *", [req.session.userId])
+  try {
+    const user = await db.query("SELECT * FROM users WHERE id=$1", [req.session.userId])
+    req.user = user.rows[0]
+    next()
+  } catch (error) {
+    console.log(error)
+  }
   // const user = await db.user.findFirst({ where: { id: req.session.userId } })
-  req.user = user.rows[0]
-  next()
 })
 
 
@@ -50,10 +54,12 @@ router.use(async (req, res, next) => {
 //   // console.log(req.user)
 // })
 
-router.post("/chuj", async (req,res)=>{
+
+router.post("/chuj", async (req, res)=>{
   try {
     let result = await db.query("INSERT INTO users (name, email) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [req.body.name, req.body.email])
     console.log(result.rows[0].name)
+    res.send("poszło")
   } catch (error) {
       console.log(error)
   }
