@@ -68,8 +68,8 @@ router.post("/api/v1/auth/google", async (req, res) => {
   const { name, email } = ticket.getPayload();
   // moje
   try {
-    let user = await db.query("INSERT INTO users (name, email) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [name, email, name])
-    if (result.rows[0] == null)
+    let user = await db.query("INSERT INTO users (name, email) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [name, email])
+    if (user.rows[0] == null)
       console.log("No user")
     else{
       req.session.userId = user.rows[0].id
