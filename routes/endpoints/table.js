@@ -18,7 +18,9 @@ router.use(bodyParser.urlencoded({
     extended: true
 }))
 
-
+router.get("/me", async (req, res) => {
+    res.status(200).json(req.user)
+  })
 
 // DELETE ONE TABLE 
 router.delete('/delete/:id', async (req, res) => {
