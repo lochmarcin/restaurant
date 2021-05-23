@@ -104,14 +104,12 @@ router.post("/api/v1/auth/google", async (req, res) => {
 
 
 router.get("/me", async (req, res) => {
-  res.status(200)
-  res.json(req.user)
+  res.status(200).json(req.user)
 })
 
 router.delete("/api/v1/auth/logout", async (req, res) => {
   await req.session.destroy()
-  res.status(200)
-  res.json({
+  res.status(200).json({
     message: "Logged out successfully"
   })
 })
