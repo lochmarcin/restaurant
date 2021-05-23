@@ -7,6 +7,8 @@ const cookieSession = require('cookie-session')
 require('./passport-setup')
 const db = require("../../db")
 
+const session = require('express-session')
+
 const { OAuth2Client } = require('google-auth-library')
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
@@ -19,10 +21,10 @@ router.use(bodyParser.urlencoded({
 
 router.use(bodyParser.json())
 
-router.use(cookieSession({
-  name: 'g-session',
-  keys: ['key1', 'key2']
-}))
+// router.use(cookieSession({
+//   name: 'g-session',
+//   keys: ['key1', 'key2']
+// }))
 
 // const isLogin = (req, res, next) => {
 //   if (req.user)
@@ -33,8 +35,8 @@ router.use(cookieSession({
 // }
 
 
-router.use(passport.initialize());
-router.use(passport.session());
+// router.use(passport.initialize());
+// router.use(passport.session());
 
 router.use(async (req, res, next) => {
   try {
@@ -108,10 +110,15 @@ router.get("/me", async (req, res) => {
 })
 
 router.delete("/api/v1/auth/logout", async (req, res) => {
-  await req.session.destroy()
+  try {
+    await req.session.destroy()
   res.status(200).json({
     message: "Logged out successfully"
   })
+  } catch (error) {
+    console.log(error)
+  }
+  
 })
 
 
