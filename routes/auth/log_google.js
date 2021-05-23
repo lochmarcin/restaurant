@@ -66,7 +66,8 @@ router.post("/chuj", async (req, res)=>{
 })
 
 router.post("/api/v1/auth/google", async (req, res) => {
-  const { token } = req.body
+  console.log(req.body)
+  const { token } = req.body.idToken
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience: process.env.GOOGLE_CLIENT_ID
