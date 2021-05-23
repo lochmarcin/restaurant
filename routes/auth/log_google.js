@@ -39,13 +39,11 @@ router.use(bodyParser.json())
 // router.use(passport.session());
 
 router.use(async (req, res, next) => {
-  try {
+  
     const user = await db.query("SELECT * FROM users WHERE id=$1", [req.session.userId])
     req.user = user.rows[0]
     next()
-  } catch (error) {
-    console.log(error)
-  }
+  
   // const user = await db.user.findFirst({ where: { id: req.session.userId } })
 })
 
