@@ -50,32 +50,31 @@ router.use(async (req, res, next) => {
 
 // router.get('/', (req, res) => res.send("You aren't logged in"))
 // router.get('/good', isLogin, (req, res) => {
-//   res.send(`no elo ${req.user.id}, ${req.user.displayName}, ${req.user.emails[0].value}`)
+//   res.send(no elo ${req.user.id}, ${req.user.displayName}, ${req.user.emails[0].value})
 //   // console.log(req.user)
 // })
 
 
-router.post("/chuj", async (req, res)=>{
-  try {
-    let result = await db.query("INSERT INTO users (name, email) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [req.body.name, req.body.email])
-    console.log(result.rows[0].name)
-    res.send("poszło")
-  } catch (error) {
-      console.log(error)
-  }
-})
 
 router.post("/api/v1/auth/google", async (req, res) => {
-  console.log(req.body)
-  const { token } = req.body.idToken
+  const token  = req.body.idToken
+  console.log(token)
+
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience: process.env.GOOGLE_CLIENT_ID
   });
-  const { name, email } = ticket.getPayload();
+  // const  name, email  = ticket.getPayload();
+  const  name = ticket.getPayload();
+  
+  console.log(name.name)
+  console.log(name.email)
+
+
   // moje
   try {
-    let user = await db.query("INSERT INTO users (name, email) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [name, email])
+    let user = await db.query("INSERT INTO users (name, email) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [name.name, name.email])
+    console.log(user.rows[0].id)
     if (user.rows[0] == null)
       console.log("No user")
     else{
@@ -93,9 +92,16 @@ router.post("/api/v1/auth/google", async (req, res) => {
   // })
   // req.session.userId = user.id
 
-  res.status(201)
-  res.json(user)
+  res.status(200).json({
+    status: "success",
+      data:{
+        id: user.rows[0].id,
+        name: user.rows[0].name,
+        email: user.rows[0].email,
+      }
 })
+})
+
 
 router.get("/me", async (req, res) => {
   res.status(200)
