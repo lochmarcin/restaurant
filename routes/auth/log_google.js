@@ -108,7 +108,7 @@ router.get("/me", async (req, res) => {
 })
 
 router.delete("/api/v1/auth/logout", async (req, res) => {
-  await req.session.destroy()
+  req.session = null
   res.status(200).json({
     message: "Logged out successfully"
   })
