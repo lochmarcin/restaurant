@@ -7,8 +7,6 @@ const cookieSession = require('cookie-session')
 require('./passport-setup')
 const db = require("../../db")
 
-const session = require('express-session')
-
 const { OAuth2Client } = require('google-auth-library')
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
@@ -21,10 +19,10 @@ router.use(bodyParser.urlencoded({
 
 router.use(bodyParser.json())
 
-// router.use(cookieSession({
-//   name: 'g-session',
-//   keys: ['key1', 'key2']
-// }))
+router.use(cookieSession({
+  name: 'g-session',
+  keys: ['key1', 'key2']
+}))
 
 // const isLogin = (req, res, next) => {
 //   if (req.user)
@@ -35,15 +33,17 @@ router.use(bodyParser.json())
 // }
 
 
-// router.use(passport.initialize());
-// router.use(passport.session());
+router.use(passport.initialize());
+router.use(passport.session());
 
 router.use(async (req, res, next) => {
-  
+  try {
     const user = await db.query("SELECT * FROM users WHERE id=$1", [req.session.userId])
     req.user = user.rows[0]
     next()
-  
+  } catch (error) {
+    console.log(error)
+  }
   // const user = await db.user.findFirst({ where: { id: req.session.userId } })
 })
 
@@ -108,15 +108,10 @@ router.get("/me", async (req, res) => {
 })
 
 router.delete("/api/v1/auth/logout", async (req, res) => {
-  try {
-    await req.session.destroy()
+  await req.session.destroy()
   res.status(200).json({
     message: "Logged out successfully"
   })
-  } catch (error) {
-    console.log(error)
-  }
-  
 })
 
 
