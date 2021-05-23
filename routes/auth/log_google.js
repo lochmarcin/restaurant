@@ -79,6 +79,15 @@ router.post("/api/v1/auth/google", async (req, res) => {
       console.log("No user")
     else{
       req.session.userId = user.rows[0].id
+
+      res.status(200).json({
+        status: "success",
+          data:{
+            id: user.rows[0].id,
+            name: user.rows[0].name,
+            email: user.rows[0].email,
+          }
+      })
     }
   } catch (error) {
       console.log("Error: ", error)
@@ -91,15 +100,6 @@ router.post("/api/v1/auth/google", async (req, res) => {
   //   create: { name, email, picture }
   // })
   // req.session.userId = user.id
-
-  res.status(200).json({
-    status: "success",
-      data:{
-        id: user.rows[0].id,
-        name: user.rows[0].name,
-        email: user.rows[0].email,
-      }
-})
 })
 
 
