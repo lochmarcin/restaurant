@@ -100,27 +100,27 @@ router.put('/update/:id ', async (req, res) => {
 
 
 // CREATE TABLE    CREATE TABLE    
-// router.post('/create', upload.single('image'), async (req, res) => {
-//     console.log('body', req.body)
-//     console.log('file', req.file)
+router.post('/create', upload.single('image'), async (req, res) => {
+    console.log('body', req.body)
+    console.log('file', req.file)
         
-//     const image = await imageProcess(req)
-//     console.log(image)
+    const image = await imageProcess(req)
+    console.log(image)
     
-//     try {
-//         const result = await db.query("INSERT INTO tables (id_rest, numb_seats, imageUrl) VALUES ($1, $2, $3) returning *",
-//             [req.body.id_rest, req.body.numb_seats, image])
-//         console.log(result.rows)
-//         res.status(200).json({
-//             status: "success",
-//             data: {
-//                 users: result.rows[0],
-//             }
-//         })
-//     } catch (err) {
-//         console.log(err)
-//     }
-// })
+    try {
+        const result = await db.query("INSERT INTO tables (id_rest, numb_seats, imageUrl) VALUES ($1, $2, $3) returning *",
+            [req.body.id_rest, req.body.numb_seats, image])
+        console.log(result.rows)
+        res.status(200).json({
+            status: "success",
+            data: {
+                users: result.rows[0],
+            }
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 
 // CREATE  MANY MAAAAAANYYYYYYYYYYYYY  TABLES    CREATE TABLE    

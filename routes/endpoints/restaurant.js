@@ -92,6 +92,9 @@ router.put('/update/:user_id', async (req, res) => {
 
 // CREATE RESTAURANT       CREATE RESTAURANT 
 router.post('/create', upload.single('image'), async (req, res) => {
+    console.log('body', req.body)
+    console.log('file', req.file)
+
     const image = await imageProcess(req)
     console.log(image)
     try {
