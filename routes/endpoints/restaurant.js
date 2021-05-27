@@ -6,6 +6,8 @@ const db = require("../../db")
 const bodyParser = require("body-parser")
 const Restaurant = require('../../schema/restaurantSchema')
 
+const imageProcess = require('./../services/imageProcess')
+
 const multer = require("multer")
 
 const storage = multer.memoryStorage()
