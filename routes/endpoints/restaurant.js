@@ -98,7 +98,7 @@ router.post('/create', upload.single('image'), async (req, res) => {
     const image = await imageProcess(req)
     console.log(image)
     try {
-        const result = await db.query("INSERT INTO restaurant (user_id, name, description, category, nip, phone, city, street, apart_number, imageUrl) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *",
+        const result = await db.query("INSERT INTO restaurant (user_id, name, description, category, nip, phone, city, street, apart_number, image_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *",
             [req.body.user_id, req.body.name, req.body.description, req.body.category, req.body.nip, req.body.phone, req.body.city, req.body.street, req.body.apart_number, image])
         console.log(result.rows)
         res.status(200).json({
