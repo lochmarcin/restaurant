@@ -11,6 +11,8 @@ const db = require("../../db")
 const { OAuth2Client } = require('google-auth-library')
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
+// https://www.youtube.com/watch?v=hNinO6-bDVM
+// https://www.youtube.com/watch?v=gTowbsNPp9I
 
 router.use(cors())
 
@@ -58,7 +60,7 @@ router.use(async (req, res, next) => {
 
 
 router.post("/api/v1/auth/google", async (req, res) => {
-  const token  = req.body.idToken
+  const token = req.body.idToken
   console.log(token)
 
   const ticket = await client.verifyIdToken({
@@ -66,8 +68,8 @@ router.post("/api/v1/auth/google", async (req, res) => {
     audience: process.env.GOOGLE_CLIENT_ID
   });
   // const  name, email  = ticket.getPayload();
-  const  name = ticket.getPayload();
-  
+  const name = ticket.getPayload();
+
   console.log(name.name)
   console.log(name.email)
 
@@ -78,20 +80,20 @@ router.post("/api/v1/auth/google", async (req, res) => {
     console.log(user.rows[0].id)
     if (user.rows[0] == null)
       console.log("No user")
-    else{
+    else {
       req.session.userId = user.rows[0].id
 
       res.status(200).json({
         status: "success",
-          data:{
-            id: user.rows[0].id,
-            name: user.rows[0].name,
-            email: user.rows[0].email,
-          }
+        data: {
+          id: user.rows[0].id,
+          name: user.rows[0].name,
+          email: user.rows[0].email,
+        }
       })
     }
   } catch (error) {
-      console.log("Error: ", error)
+    console.log("Error: ", error)
   }
 
   //

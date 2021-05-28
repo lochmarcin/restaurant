@@ -2,10 +2,10 @@
 // import mongoose from 'mongoose';
 // import login from './login'; 
 
-require('dotenv').config({path:'.env'}) 
+require('dotenv').config({ path: '.env' })
 const app = require('./app')
 const express = require('express')
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
 const db = require("./db")
 // const login = require('./routes/login') 
 const cors = require('cors')
