@@ -60,13 +60,13 @@ router.get('/get/:id_user', async (req, res) => {
     }
 })
 
-// GET ONE TABLE 
-router.get('/get/:id', async (req, res) => {
+// GET TABLES FROM RESTAURANT  
+router.get('/getAll/:id_rest', async (req, res) => {
     console.log(req.body)
     console.log(req.params)
     try {
-        const result = await db.query("SELECT * FROM restaurant WHERE id = $1",
-            [req.params.id])
+        const result = await db.query("SELECT * FROM tables WHERE id_rest = $1",
+            [req.params.id_rest])
         console.log(result.rows)
         res.status(200).json({
             status: "success",
@@ -108,8 +108,8 @@ router.post('/create', upload.single('image'), async (req, res) => {
     console.log(image)
     
     try {
-        const result = await db.query("INSERT INTO tables (id_rest, numb_seats, image_url) VALUES ($1, $2, $3) returning *",
-            [req.body.id_rest, req.body.numb_seats, image])
+        const result = await db.query("INSERT INTO tables (id_rest, numb_seats, image_url, number_table) VALUES ($1, $2, $3, $4) returning *",
+            [req.body.id_rest, req.body.numb_seats, image, req,body.number_table])
         console.log(result.rows)
         res.status(200).json({
             status: "success",
