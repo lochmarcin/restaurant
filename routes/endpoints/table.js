@@ -7,7 +7,7 @@ const fs = require('fs')
 const bodyParser = require("body-parser")
 const Restaurant = require('../../schema/restaurantSchema')
 const imageProcess = require('./../services/imageProcess')
-const dirname = require('../../uploads/dirname')
+const dirname = require('../../dirname')
 
 const multer = require("multer")
 
@@ -35,7 +35,7 @@ router.delete('/delete/:id', async (req, res) => {
         del = del[del.length-1]
         
         let path = await dirname()
-        path = `${path}\\${del}`
+        path = `${path}\\uploads\\${del}`
         
         console.log(path)
         fs.unlinkSync(path)
