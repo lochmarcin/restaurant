@@ -27,13 +27,13 @@ router.delete('/delete/:id', async (req, res) => {
     console.log(req.body)
     console.log(req.params)
     try {
-        const result = await db.query("SELECT * FROM restaurant WHERE id_user = $1",
-            [req.params.id_user])
+        const result = await db.query("DELETE FROM tables WHERE id = $1 ",
+            [req.params.id])
         console.log(result.rows)
         res.status(200).json({
             status: "success",
             data: {
-                restaurant: result.rows[0],
+                table: result.rows[0],
             }
         })
     } catch (err) {
