@@ -2,10 +2,12 @@ const express = require('express')
 const mongoose = require('mongoose')
 const router = express.Router()
 const db = require("../../db")
+const fs = require('fs')
 
 const bodyParser = require("body-parser")
 const Restaurant = require('../../schema/restaurantSchema')
 const imageProcess = require('./../services/imageProcess')
+const dirname = require('../../uploads/dirname')
 
 const multer = require("multer")
 
@@ -27,14 +29,21 @@ router.delete('/delete/:id', async (req, res) => {
     console.log(req.body)
     console.log(req.params)
     try {
+        let del = await db.query("SELECT image_url FROM tables WHERE id = $1",[req.params.id])
+        del = del.rows[0].image_url
+        del = del.split('/')
+        del = del[del.length-1]
+        
+        let path = await dirname()
+        path = `${path}\\${del}`
+        
+        console.log(path)
+        fs.unlinkSync(path)
+
         const result = await db.query("DELETE FROM tables WHERE id = $1 ",
             [req.params.id])
-        console.log(result.rows)
         res.status(200).json({
-            status: "success",
-            data: {
-                table: result.rows[0],
-            }
+            status: "success"
         })
     } catch (err) {
         console.log(err)
