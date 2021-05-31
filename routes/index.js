@@ -38,7 +38,7 @@ const pgPool = new Pool(
 router.use(session({
     store: new pgSession({
         pool : pgPool,                // Connection pool
-        tableName : 'user_sessions'   // Use another table-name than the default "session" one
+        tableName : 'session'   // Use another table-name than the default "session" one
       }),
     secret: 'asdfghjkl',
     resave: false,
