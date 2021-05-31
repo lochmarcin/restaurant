@@ -52,7 +52,7 @@ router.get('/get/:id_user', async (req, res) => {
         res.status(200).json({
             status: "success",
             data: {
-                restaurant: result.rows[0],
+                tables: result.rows[0],
             }
         })
     } catch (err) {
@@ -71,7 +71,7 @@ router.get('/getAll/:id_rest', async (req, res) => {
         res.status(200).json({
             status: "success",
             data: {
-                restaurant: result.rows[0],
+                tables: result.rows,
             }
         })
     } catch (err) {
@@ -90,7 +90,7 @@ router.put('/update/:id ', async (req, res) => {
         res.status(200).json({
             status: "success",
             data: {
-                users: result.rows[0],
+                tables: result.rows[0],
             }
         })
     } catch (err) {
@@ -109,7 +109,7 @@ router.post('/create', upload.single('image'), async (req, res) => {
     
     try {
         const result = await db.query("INSERT INTO tables (id_rest, numb_seats, image_url, number_table) VALUES ($1, $2, $3, $4) returning *",
-            [req.body.id_rest, req.body.numb_seats, image, req,body.number_table])
+            [req.body.id_rest, req.body.numb_seats, image, req.body.number_table])
         console.log(result.rows)
         res.status(200).json({
             status: "success",

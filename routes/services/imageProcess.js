@@ -18,7 +18,7 @@ const imageProcess = async (req) => {
         console.log('Error image while : ' + err)
     }
 
-    return `http://localhost:5000/${fileName}`
+    return `http://127.0.0.1:5000/${fileName}`
     
 }
 

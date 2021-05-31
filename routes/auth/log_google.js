@@ -22,10 +22,10 @@ router.use(bodyParser.urlencoded({
 
 router.use(bodyParser.json())
 
-router.use(cookieSession({
-  name: 'g-session',
-  keys: ['key1', 'key2']
-}))
+// router.use(cookieSession({
+//   name: 'g-session',
+//   keys: ['key1', 'key2']
+// }))
 
 // const isLogin = (req, res, next) => {
 //   if (req.user)
@@ -36,8 +36,8 @@ router.use(cookieSession({
 // }
 
 
-router.use(passport.initialize());
-router.use(passport.session());
+// router.use(passport.initialize());
+// router.use(passport.session());
 
 router.use(async (req, res, next) => {
   try {
@@ -81,7 +81,8 @@ router.post("/api/v1/auth/google", async (req, res) => {
     if (user.rows[0] == null)
       console.log("No user")
     else {
-      req.session.userId = user.rows[0].id
+      const user_id = user.rows[0].id
+      req.login(user_id)
 
       res.status(200).json({
         status: "success",
@@ -161,6 +162,23 @@ router.delete("/api/v1/auth/logout", async (req, res) => {
 // })
 
 
+passport.serializeUser(function(user_id, done) {
+  done(null, user_id);
+});
+ 
+passport.deserializeUser(function(user_id, done) {
+    done(null, user_id);
+});
 
+function authentication() {
+  return (req, res, next) => {
+    console.log(`
+    req.session.passport.user: ${JSON.stringify(req.session.passport)}`)
+    if(req.isAuthenticated())
+      return next()
+    
+      res.redirect('/')
+    }
+}
 
 module.exports = router

@@ -12,9 +12,12 @@ const google = require("./auth/log_google")
 const facebook = require("./auth/log_fb")
 const table = require("./endpoints/table")
 const { routes } = require('../app')
+const { Pool } = require("pg");
 
 // Authentication requires
 const session = require('express-session')
+const passport = require('passport')
+const pgSession = require('connect-pg-simple')(session)
 
 
 router.use(bodyParser.json())
@@ -22,12 +25,28 @@ router.use(bodyParser.urlencoded({
     extended: true
 }))
 
+const pgPool = new Pool(
+    {
+      user: process.env.PGUSER,
+      host: process.env.PGHOST,
+      database: process.env.PGPASSWORD,
+      password: process.env.PGDATABASE,
+      port: process.env.PGPORT
+    }
+  );
+
 router.use(session({
+    store: new pgSession({
+        pool : pgPool,                // Connection pool
+        tableName : 'user_sessions'   // Use another table-name than the default "session" one
+      }),
     secret: 'asdfghjkl',
     resave: false,
     saveUninitialized: false
     // cookie: { secure: true }  if https !
 }))
+router.use(passport.initialize())
+router.use(passport.session())
 
 
 router.use('/login', login)
