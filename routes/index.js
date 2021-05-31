@@ -25,6 +25,9 @@ router.use(bodyParser.urlencoded({
     extended: true
 }))
 
+router.use(passport.initialize())
+router.use(passport.session())
+
 const pgPool = new Pool(
     {
       user: process.env.PGUSER,
@@ -45,8 +48,6 @@ router.use(session({
     saveUninitialized: false
     // cookie: { secure: true }  if https !
 }))
-router.use(passport.initialize())
-router.use(passport.session())
 
 
 router.use('/login', login)

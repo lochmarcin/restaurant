@@ -59,7 +59,7 @@ router.use(async (req, res, next) => {
 
 
 
-router.post("/api/v1/auth/google", async (req, res) => {
+router.post("/api/v1/auth/google", passport.authenticate(), async (req, res) => {
   const token = req.body.idToken
   console.log(token)
 
