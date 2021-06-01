@@ -6,6 +6,8 @@ const passport = require("passport")
 const cookieSession = require('cookie-session')
 require('./passport-setup')
 const db = require("../../db")
+const jwt  = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
 
 
 const { OAuth2Client } = require('google-auth-library')
@@ -39,16 +41,16 @@ router.use(bodyParser.json())
 // router.use(passport.initialize());
 // router.use(passport.session());
 
-router.use(async (req, res, next) => {
-  try {
-    const user = await db.query("SELECT * FROM users WHERE id=$1", [req.session.userId])
-    req.user = user.rows[0]
-    next()
-  } catch (error) {
-    console.log(error)
-  }
-  // const user = await db.user.findFirst({ where: { id: req.session.userId } })
-})
+// router.use(async (req, res, next) => {
+//   try {
+//     const user = await db.query("SELECT * FROM users WHERE id=$1", [req.session.userId])
+//     req.user = user.rows[0]
+//     next()
+//   } catch (error) {
+//     console.log(error)
+//   }
+//   // const user = await db.user.findFirst({ where: { id: req.session.userId } })
+// })
 
 
 // router.get('/', (req, res) => res.send("You aren't logged in"))
@@ -82,7 +84,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
       console.log("No user")
     else {
       const user_id = user.rows[0].id
-      req.login(user_id)
+      // req.login(user_id)
 
       const accessToken = jwt.sign({id: user_id}, process.env.TOKEN_SECRET, { expiresIn: "7d"})
       const refreshToken = jwt.sign({id: user_id}, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d"})
