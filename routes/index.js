@@ -10,7 +10,10 @@ const restaurant = require('./endpoints/restaurant')
 const userEdit = require("./userSet/userEdit")
 const google = require("./auth/log_google")
 const facebook = require("./auth/log_fb")
+
+const reserwation = require("./endpoints/reserwation")
 const table = require("./endpoints/table")
+const log = require("./auth/log")
 const { routes } = require('../app')
 const { Pool } = require("pg");
 
@@ -50,12 +53,15 @@ router.use(session({
 }))
 
 
-router.use('/login', login)
+router.use('/chuj', login)
+
+router.use('/login', log)
 router.use('/google', google)
 router.use('/fb', facebook)
 router.use('/restaurant', restaurant)
 router.use('/user', userEdit)
 router.use('/table', table)
+router.use('/reserwation', reserwation)
 
 
 

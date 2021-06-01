@@ -59,7 +59,7 @@ router.use(async (req, res, next) => {
 
 
 
-router.post("/api/v1/auth/google", passport.authenticate(), async (req, res) => {
+router.post("/api/v1/auth/google", async (req, res) => {
   const token = req.body.idToken
   console.log(token)
 
@@ -84,6 +84,17 @@ router.post("/api/v1/auth/google", passport.authenticate(), async (req, res) => 
       const user_id = user.rows[0].id
       req.login(user_id)
 
+      const accessToken = jwt.sign({id: user_id}, process.env.TOKEN_SECRET, { expiresIn: "7d"})
+      const refreshToken = jwt.sign({id: user_id}, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d"})
+
+      const userToken = await db.query("UPDATE users SET refresh_token=$1 WHERE email=$2",[refreshToken,name.email])
+
+      // IF COOKIE :)
+      res.cookie('JWT', accessToken,{
+        maxAge: 86400000,
+        httpOnly: true
+    })
+
       res.status(200).json({
         status: "success",
         data: {
@@ -105,6 +116,24 @@ router.post("/api/v1/auth/google", passport.authenticate(), async (req, res) => 
   // })
   // req.session.userId = user.id
 })
+function authenticate(req,res,next){
+  // ##### IF NOT COOKIE
+  // const authHeader = req.headers['authorization']
+  // const token = authHeader && authHeader.split(' ')[1]
+
+  // IF COOKIE :) 
+  const token = req.cookies.JWT
+
+  if(token === null) 
+      return res.sendStatus(401)
+  jwt.verify(token, process.env.TOKEN_SECRET, (err,user)=>{
+      if(err)
+          return res.sendStatus(403)
+      req.user = user
+      next()
+  })
+}
+
 
 
 router.get("/me", async (req, res) => {
