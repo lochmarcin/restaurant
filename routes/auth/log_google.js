@@ -124,7 +124,8 @@ router.post("/api/v1/auth/google",  async (req, res) => {
 
 router.get("/me", async (req, res) => {
   authenticate(req,res)
-  console.log(user)
+  console.log(req.user)
+  res.send(req.user)
 })
 
 router.delete("/api/v1/auth/logout", async (req, res) => {
