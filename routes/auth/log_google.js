@@ -9,6 +9,8 @@ const db = require("../../db")
 const jwt  = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 
+const authenticate = require('../services/authenticate')
+
 
 const { OAuth2Client } = require('google-auth-library')
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
@@ -61,7 +63,7 @@ router.use(bodyParser.json())
 
 
 
-router.post("/api/v1/auth/google", async (req, res) => {
+router.post("/api/v1/auth/google",  async (req, res) => {
   const token = req.body.idToken
   console.log(token)
 
@@ -89,7 +91,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
       const accessToken = jwt.sign({id: user_id}, process.env.TOKEN_SECRET, { expiresIn: "7d"})
       const refreshToken = jwt.sign({id: user_id}, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d"})
 
-      const userToken = await db.query("UPDATE users SET refresh_token=$1 WHERE email=$2",[refreshToken,name.email])
+      // const userToken = await db.query("UPDATE users SET refresh_token=$1 WHERE email=$2",[refreshToken,name.email])
 
       // IF COOKIE :)
       res.cookie('JWT', accessToken,{
@@ -118,28 +120,11 @@ router.post("/api/v1/auth/google", async (req, res) => {
   // })
   // req.session.userId = user.id
 })
-function authenticate(req,res,next){
-  // ##### IF NOT COOKIE
-  // const authHeader = req.headers['authorization']
-  // const token = authHeader && authHeader.split(' ')[1]
-
-  // IF COOKIE :) 
-  const token = req.cookies.JWT
-
-  if(token === null) 
-      return res.sendStatus(401)
-  jwt.verify(token, process.env.TOKEN_SECRET, (err,user)=>{
-      if(err)
-          return res.sendStatus(403)
-      req.user = user
-      next()
-  })
-}
-
 
 
 router.get("/me", async (req, res) => {
-  res.status(200).json(req.user)
+  authenticate(req,res)
+  console.log(user)
 })
 
 router.delete("/api/v1/auth/logout", async (req, res) => {
@@ -193,23 +178,6 @@ router.delete("/api/v1/auth/logout", async (req, res) => {
 // })
 
 
-passport.serializeUser(function(user_id, done) {
-  done(null, user_id);
-});
- 
-passport.deserializeUser(function(user_id, done) {
-    done(null, user_id);
-});
 
-function authentication() {
-  return (req, res, next) => {
-    console.log(`
-    req.session.passport.user: ${JSON.stringify(req.session.passport)}`)
-    if(req.isAuthenticated())
-      return next()
-    
-      res.redirect('/')
-    }
-}
 
 module.exports = router

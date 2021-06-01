@@ -5,11 +5,16 @@ const bcrypt = require("bcrypt")
 const jwt  = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 
+const authenticate = require('../services/authenticate')
+
+
 
 router.use(cookieParser())
 
-router.get("/login", authenticate ,async (req,res)=>{
-    res.status(200).send('chuj')
+router.get("/login", async (req,res)=>{
+    authenticate(req,res)
+    
+    console.log(req.user)
 })
 
 router.post('/register', async (req, res) => {
@@ -93,22 +98,23 @@ router.post("/refresh", async (req,res) => {
 
 })
 
-function authenticate(req,res,next){
-    // ##### IF NOT COOKIE
-    // const authHeader = req.headers['authorization']
-    // const token = authHeader && authHeader.split(' ')[1]
+// function authenticate(req,res,next){
+//     // ##### IF NOT COOKIE
+//     // const authHeader = req.headers['authorization']
+//     // const token = authHeader && authHeader.split(' ')[1]
 
-    // IF COOKIE :) 
-    const token = req.cookies.JWT
+//     // IF COOKIE :) 
+//     const token = req.cookies.JWT
 
-    if(token === null) 
-        return res.sendStatus(401)
-    jwt.verify(token, process.env.TOKEN_SECRET, (err,user)=>{
-        if(err)
-            return res.sendStatus(403)
-        req.user = user
-        next()
-    })
-}
+//     if(token === null) 
+//         return res.sendStatus(401)
+//     jwt.verify(token, process.env.TOKEN_SECRET, (err,user)=>{
+//         if(err)
+//             return res.sendStatus(403)
+//         req.user = user
+//         // console.log(user)
+//         next()
+//     })
+// }
 
 module.exports = router
