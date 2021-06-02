@@ -64,6 +64,7 @@ router.use(bodyParser.json())
 
 
 router.post("/api/v1/auth/google",  async (req, res) => {
+  const role = req.body.role
   const token = req.body.idToken
   console.log(token)
 
@@ -80,7 +81,7 @@ router.post("/api/v1/auth/google",  async (req, res) => {
 
   // moje
   try {
-    let user = await db.query("INSERT INTO users (name, email) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [name.name, name.email])
+    let user = await db.query("INSERT INTO users (name, email, role) VALUES ($1, $2, $3) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [name.name, name.email, role])
     console.log(user.rows[0].id)
     if (user.rows[0] == null)
       console.log("No user")
@@ -125,6 +126,8 @@ router.post("/api/v1/auth/google",  async (req, res) => {
 router.get("/me", async (req, res) => {
   authenticate(req,res)
   console.log(req.user)
+  console.log("CHUUUUUJ")
+
   res.send(req.user)
 })
 
