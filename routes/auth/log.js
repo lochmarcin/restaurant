@@ -19,7 +19,6 @@ router.put("/update", async (req, res) => {
         console.log(req.body.phone)
         const user = await db.query("UPDATE users SET phone=$1 WHERE id=$2", [req.body.phone, req.user.id])
 
-        res.status(200).send("Success")
     } catch (err) {
         console.log(err)
     }
