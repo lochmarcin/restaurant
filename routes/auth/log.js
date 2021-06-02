@@ -11,12 +11,25 @@ const authenticate = require('../services/authenticate')
 
 router.use(cookieParser())
 
+
+router.put("/update", async (req, res) => {
+    authenticate(req, res)
+    try {
+        const user = await db.query("UPDATE users SET phone=$1 WHERE id=$2", [req.body.phone, req.uses.id])
+
+        res.status(200).send("Success")
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+
 router.get("/me", async (req, res) => {
     authenticate(req, res)
     try {
         const user = await db.query("SELECT * FROM users WHERE id=$1", [req.user.id])
 
-        res.status(200).send(user.rows[0].name)
+        res.status(200).send(user.rows[0])
     } catch (err) {
         console.log(err)
     }
