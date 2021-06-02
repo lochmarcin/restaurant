@@ -36,7 +36,7 @@ router.get('/getAll', async (req, res) => {
 })
 
 // GET ALL RESTAURANT BY CITY       GET ALL RESTAURANT BY CITY 
-router.get('/getAll/:city', async (req, res) => {
+router.get('/getAll/:name', async (req, res) => {
     console.log(req.body)
     try {
         const result = await db.query("SELECT * FROM restaurant WHERE name=$1", [req.params.name])
