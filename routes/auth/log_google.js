@@ -6,7 +6,7 @@ const passport = require("passport")
 const cookieSession = require('cookie-session')
 require('./passport-setup')
 const db = require("../../db")
-const jwt  = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 
 const authenticate = require('../services/authenticate')
@@ -63,7 +63,7 @@ router.use(bodyParser.json())
 
 
 
-router.post("/api/v1/auth/google",  async (req, res) => {
+router.post("/api/v1/auth/google", async (req, res) => {
   const role = req.body.role
   const token = req.body.idToken
   console.log(token)
@@ -89,16 +89,16 @@ router.post("/api/v1/auth/google",  async (req, res) => {
       const user_id = user.rows[0].id
       // req.login(user_id)
 
-      const accessToken = jwt.sign({id: user_id}, process.env.TOKEN_SECRET, { expiresIn: "7d"})
-      const refreshToken = jwt.sign({id: user_id}, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d"})
+      const accessToken = jwt.sign({ id: user_id }, process.env.TOKEN_SECRET, { expiresIn: "7d" })
+      const refreshToken = jwt.sign({ id: user_id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d" })
 
       // const userToken = await db.query("UPDATE users SET refresh_token=$1 WHERE email=$2",[refreshToken,name.email])
 
       // IF COOKIE :)
-      res.cookie('JWT', accessToken,{
+      res.cookie('JWT', accessToken, {
         maxAge: 86400000,
         httpOnly: true
-    })
+      })
 
       res.status(200).json({
         status: "success",
@@ -124,9 +124,8 @@ router.post("/api/v1/auth/google",  async (req, res) => {
 
 
 router.get("/me", async (req, res) => {
-  authenticate(req,res)
+  authenticate(req, res)
   console.log(req.user)
-  console.log("CHUUUUUJ")
 
   res.send(req.user)
 })
