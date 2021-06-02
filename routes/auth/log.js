@@ -15,9 +15,9 @@ router.use(cookieParser())
 router.put("/update", async (req, res) => {
     authenticate(req, res)
     try {
-        console.log(req.uses.id)
+        console.log(req.user.id)
         console.log(req.body.phone)
-        const user = await db.query("UPDATE users SET phone=$1 WHERE id=$2", [req.body.phone, req.uses.id])
+        const user = await db.query("UPDATE users SET phone=$1 WHERE id=$2", [req.body.phone, req.user.id])
 
         res.status(200).send("Success")
     } catch (err) {
