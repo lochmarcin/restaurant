@@ -36,7 +36,7 @@ router.get('/getAll', async (req, res) => {
 })
 
 // GET ALL RESTAURANT BY CITY       GET ALL RESTAURANT BY CITY 
-router.get('/getByCity/:name', async (req, res) => {
+router.get('/getByName/:name', async (req, res) => {
     console.log(req.body)
     try {
         const result = await db.query("SELECT * FROM restaurant WHERE name=$1", [req.params.name])
@@ -53,7 +53,7 @@ router.get('/getByCity/:name', async (req, res) => {
 })
 
 // GET ALL RESTAURANT BY NAME   
-router.get('/getByName/:city', async (req, res) => {
+router.get('/getByCity/:city', async (req, res) => {
     console.log(req.body)
     try {
         const result = await db.query("SELECT * FROM restaurant WHERE city=$1", [req.params.city])
