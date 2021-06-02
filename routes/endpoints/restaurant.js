@@ -11,7 +11,7 @@ const imageProcess = require('./../services/imageProcess')
 const multer = require("multer")
 
 const storage = multer.memoryStorage()
-const upload = multer({storage}) 
+const upload = multer({ storage })
 
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({
@@ -39,7 +39,7 @@ router.get('/getAll', async (req, res) => {
 router.get('/getAll/:city', async (req, res) => {
     console.log(req.body)
     try {
-        const result = await db.query("SELECT * FROM restaurant WHERE city=$1",[req.params.city])
+        const result = await db.query("SELECT * FROM restaurant WHERE name=$1", [req.params.name])
         console.log(result.rows)
         res.status(200).json({
             status: "success",
@@ -51,7 +51,24 @@ router.get('/getAll/:city', async (req, res) => {
         console.log(err)
     }
 })
-     
+
+// GET ALL RESTAURANT BY NAME   
+router.get('/getAll/:city', async (req, res) => {
+    console.log(req.body)
+    try {
+        const result = await db.query("SELECT * FROM restaurant WHERE city=$1", [req.params.city])
+        console.log(result.rows)
+        res.status(200).json({
+            status: "success",
+            data: {
+                restaurant: result.rows,
+            }
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 // GET RESTAURANT       GET RESTAURANT 
 router.get('/get/:user_id', async (req, res) => {
     console.log(req.body)
