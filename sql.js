@@ -24,3 +24,16 @@ WHERE tables.id_rest=1 AND reserwation.date_booking = '2021-06-20'
 
 SELECT tables.id, tables.id_rest, tables.numb_seats, tables.image_url, tables.number_table 
 FROM tables WHERE tables.id_rest=1 AND tables.id != (SELECT id_table FROM reserwation WHERE reserwation.date_booking = '2021-06-30')
+
+
+-- SELECT * FROM reserwation
+
+-- SELECT * from tables
+
+SELECT tables.id, tables.id_rest, tables.numb_seats, tables.image_url, tables.number_table 
+FROM tables WHERE tables.id_rest=1 AND tables.id != (SELECT id_table FROM reserwation WHERE reserwation.date_booking = '2021-06-30')
+
+
+-- INSERT INTO tables (id_rest,numb_seats, image_url, number_table) VAlUES(1, 15,'www.dupa.pl', 5)
+
+-- INSERT INTO reserwation (id_user, id_restaurant, id_table, date_booking) VALUES (18,1,39,'2021-06-30')
