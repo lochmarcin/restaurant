@@ -73,14 +73,14 @@ router.get('/get/:id_user', async (req, res) => {
 // GET rezerwacje z konkretnej daty oraz restauracji 
 router.get("/getByDate", async (req,res)=>{
     // authenticate(req,res)
-    console.log(req.body)
+    console.log(req.params)
     // req.body.date_choice 
 
     try {
-        const date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
+        const date_booking = `${req.params.year}-${req.params.month}-${req.params.day}`
 
         const result = await db.query("SELECT tables.id, tables.id_rest, tables.image_url, tables.numb_seats, tables.number_table FROM tables INNER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
-            req.body.id_rest, date_booking ,
+            req.params.id_rest, date_booking ,
         ])
         console.log(result.rows)
         res.status(200).json({
