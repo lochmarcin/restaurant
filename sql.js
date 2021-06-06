@@ -16,3 +16,8 @@ ON reserwation.id_user = users.id
 INNER JOIN restaurant
 ON reserwation.id_restaurant = restaurant.id
 WHERE users.id=18 AND date_booking >= CURRENT_DATE OR time_booking >= CURRENT_TIME(0)
+
+// Pobieranie rezerwacji z konkretnego dnia dla konkretnego stolika 
+SELECT tables.id, tables.id_rest, tables.image_url, tables.number_table 
+FROM tables INNER JOIN reserwation ON reserwation.id_table = tables.id 
+WHERE tables.id_rest=1 AND reserwation.date_booking = '2021-06-20'

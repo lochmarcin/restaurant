@@ -69,6 +69,30 @@ router.get('/get/:id_user', async (req, res) => {
     }
 })
 
+// wyślij tylko te które są dostępne na konkretny dzień
+// GET rezerwacje z konkretnej daty oraz restauracji 
+router.get("/getByDate:id_rest", async (req,res)=>{
+    authenticate(req,res)
+    console.log(req.body)
+    // req.body.date_choice 
+    console.log(req.params)
+    try {
+        const date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
+
+        const reserwation = await db.query("SELECT tables.id, tables.id_rest, tables.image_url, tables.numb_seats, tables.number_table FROM tables INNER JOIN reserwation ON reserwation.id_table = tables.id WHERE table.id_rest=$1 AND reserwation.date_booking = $2", [
+            req.params.id_rest, date_booking ,
+        ])
+        res.json({
+            status: "success",
+            data: {
+                tables: result.rows
+            }
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 // GET TABLES FROM RESTAURANT  
 router.get('/getAll/:id_rest', async (req, res) => {
     console.log(req.body)

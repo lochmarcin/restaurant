@@ -3,6 +3,12 @@ const router = express.Router()
 const db = require("../../db")
 const authenticate = require('../services/authenticate')
 
+
+
+
+// usuwanie rezerwacji 
+
+
 // GET INFO 1 reserwations BY ID USER
 router.get("/get", async (req, res) => {
     authenticate(req, res)
