@@ -71,7 +71,7 @@ router.get('/get/:id_user', async (req, res) => {
 
 // wyślij tylko te które są dostępne na konkretny dzień
 // GET rezerwacje z konkretnej daty oraz restauracji 
-router.get("/getByDate/:id_rest", async (req,res)=>{
+router.post("/getByDate/:id_rest", async (req,res)=>{
     // authenticate(req,res)
     console.log(req.params)
     // req.body.date_choice 
