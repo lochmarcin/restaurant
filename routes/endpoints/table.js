@@ -79,7 +79,7 @@ router.get("/getByDate/:id_rest", async (req,res)=>{
     try {
         const date_booking = `${req.body.year}-${req.body.month}-${req.bocy.day}`
 
-        const result = await db.query("SELECT tables.id, tables.id_rest, tables.image_url, tables.numb_seats, tables.number_table FROM tables INNER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
+        const result = await db.query("SELECT tables.id, tables.id_rest, tables.image_url, tables.numb_seats, tables.number_table FROM tables INNER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking != $2", [
             req.params.id_rest, date_booking ,
         ])
         console.log(result.rows)
