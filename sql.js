@@ -21,3 +21,6 @@ WHERE users.id=18 AND date_booking >= CURRENT_DATE OR time_booking >= CURRENT_TI
 SELECT tables.id, tables.id_rest, tables.image_url, tables.number_table 
 FROM tables INNER JOIN reserwation ON reserwation.id_table = tables.id 
 WHERE tables.id_rest=1 AND reserwation.date_booking = '2021-06-20'
+
+SELECT tables.id, tables.id_rest, tables.numb_seats, tables.image_url, tables.number_table 
+FROM tables WHERE tables.id_rest=1 AND tables.id != (SELECT id_table FROM reserwation WHERE reserwation.date_booking = '2021-06-30')
