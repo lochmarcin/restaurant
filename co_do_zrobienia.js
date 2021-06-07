@@ -10,6 +10,7 @@ Restaurator
 4. dodawanie menu 
 
 # Menu osobna tabela ? typ json ?
+https://www.postgresqltutorial.com/postgresql-json/
 
 Administrator
 1. przegląd restauracji 
