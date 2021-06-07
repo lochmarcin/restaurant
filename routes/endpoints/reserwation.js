@@ -7,7 +7,18 @@ const authenticate = require('../services/authenticate')
 
 
 // usuwanie rezerwacji 
-
+router.delete("/delete", async (req, res) => {
+    authenticate(req, res)
+    console.log(req.params.id_reserwation)
+    try {
+        const del = await db.query("DELETE FROM reserwation WHERE id=$1", [
+            req.params.id_reserwation
+        ])
+        res.sendStatus(200)
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 // GET INFO 1 reserwations BY ID USER
 router.get("/get", async (req, res) => {

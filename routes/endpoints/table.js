@@ -10,6 +10,8 @@ const imageProcess = require('./../services/imageProcess')
 const dirname = require('../../dirname')
 
 const multer = require("multer")
+// const { delete } = require('./reserwation')
+// const { delete } = require('./reserwation')
 
 const storage = multer.memoryStorage()
 const upload = multer({storage}) 
@@ -71,22 +73,40 @@ router.get('/get/:id_user', async (req, res) => {
 
 // wyślij tylko te które są dostępne na konkretny dzień
 // GET rezerwacje z konkretnej daty oraz restauracji 
-router.post("/getByDate/:id_rest", async (req,res)=>{
+router.delete("/getByDate", async (req,res)=>{
     // authenticate(req,res)
-    console.log(req.params)
-    // req.body.date_choice 
+    console.log(req.body) 
 
     try {
         const date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
 
-        const result = await db.query("SELECT tables.id, tables.id_rest, tables.numb_seats, tables.image_url, tables.number_table FROM tables WHERE tables.id_rest=$1 AND tables.id != (SELECT id_table FROM reserwation WHERE reserwation.date_booking = $2)", [
-            req.params.id_rest, date_booking ,
+        const reserwation = await db.query("SELECT tables.id FROM tables FULL OUTER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
+            req.body.id_rest, date_booking ,
         ])
-        console.log(result.rows)
+        let tables = await db.query("SELECT id, id_rest, numb_seats, number_table, image_url FROM tables WHERE id_rest=$1",[req.body.id_rest])
+
+        console.log("Rezerwacji: " + reserwation.rows.length)
+        console.log("Stolików: " + tables.rows.length)
+
+        
+        let response = []
+        let del
+        for(let tab=0; tab<tables.rows.length;tab++){
+            del = false
+            for(let res=0; res<reserwation.rows.length;res++){
+                if(tables.rows[tab].id == reserwation.rows[res].id)
+                    del = true
+            }
+            if(del == false)
+            response.push(tables.rows[tab])
+            // response += tables.rows[tab]
+        }
+
+        console.log("Wolnych stolików: " + response.length)
         res.status(200).json({
             status: "success",
             data: {
-                tables: result.rows
+                tables: response
             }
         })
     } catch (err) {

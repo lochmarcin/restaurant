@@ -52,6 +52,21 @@ router.get('/getByName/:name', async (req, res) => {
     }
 })
 
+router.get('/getInfo/:id_rest', async (req,res)=>{
+    console.log(req.params)
+    try {
+        const info = await db.query("SELECT name, description, category, phone, city, street, apart_number FROM restaurant WHERE id=$1",[req.params.id_rest])
+        res.status(200).json({
+            status: "success",
+            data: {
+                restaurant: info.rows,
+            }
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 // GET ALL RESTAURANT BY NAME   
 router.get('/getByCity/:city', async (req, res) => {
     console.log(req.body)
