@@ -76,7 +76,7 @@ router.get("/get/:id_rest", async (req, res) => {
     console.log(req.params)
 
     try {
-        const result = await db.query("SELECT id, page, menu_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [reg.params.id_rest])
+        const result = await db.query("SELECT id, page, menu_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [req.params.id_rest])
 
         console.log(result.rows)
         res.status(200).json({
