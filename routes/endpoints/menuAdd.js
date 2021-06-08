@@ -56,13 +56,13 @@ router.get("/getOne/:id", async (req, res) => {
     console.log(req.params)
 
     try {
-        const result = await db.query("SELECT * FROM menu_restaurant WHERE id=$1", [req.body.id])
+        const result = await db.query("SELECT * FROM menu_restaurant WHERE id=$1", [req.params.id])
         console.log(result.rows[0])
 
         res.status(200).json({
             status: "success",
             data: {
-                tables: result.rows[0],
+                menu: result.rows[0],
             }
         })
 
@@ -73,16 +73,16 @@ router.get("/getOne/:id", async (req, res) => {
 
 // pobieranie menu 
 router.get("/get/:id_rest", async (req, res) => {
-    console.log(req.body)
+    console.log(req.params)
 
     try {
-        const result = await db.query("SELECT id, page, menu_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [reg.body.id_rest])
+        const result = await db.query("SELECT id, page, menu_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [reg.params.id_rest])
 
         console.log(result.rows)
         res.status(200).json({
             status: "success",
             data: {
-                tables: result.rows,
+                menu: result.rows,
             }
         })
 
