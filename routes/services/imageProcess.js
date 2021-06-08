@@ -7,6 +7,10 @@ const imageProcess = async (req) => {
             fs.mkdirSync('./uploads')
         }
     })
+    if(req.file == null){
+        console.log("brak zdjęcia lub req.file == null")
+        return null
+    }
     const formatedName = req.file.originalname.split(' ').join('_')
     const fileName = new Date().toISOString().replace(/:/g, '-') + formatedName
     try {

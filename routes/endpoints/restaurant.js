@@ -1,5 +1,4 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const router = express.Router()
 const db = require("../../db")
 
@@ -7,6 +6,7 @@ const bodyParser = require("body-parser")
 const Restaurant = require('../../schema/restaurantSchema')
 
 const imageProcess = require('./../services/imageProcess')
+const menu = require("./menuAdd")
 
 const multer = require("multer")
 
@@ -17,6 +17,8 @@ router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({
     extended: true
 }))
+
+router.use('/menu', menu)
 
 // GET ALL RESTAURANT         GET ALL RESTAURANT
 router.get('/getAll', async (req, res) => {
