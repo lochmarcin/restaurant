@@ -59,7 +59,7 @@ router.get('/getInfo/:id_rest', async (req,res)=>{
         res.status(200).json({
             status: "success",
             data: {
-                restaurant: info.rows,
+                restaurant: info.rows[0],
             }
         })
     } catch (err) {
