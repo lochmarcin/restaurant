@@ -35,10 +35,10 @@ router.put("/update/:id", upload.single('image'), async (req, res) => {
     console.log(image)
     try {
         let result
-        if (!image) {
+        if (image == null) {
             result = await db.query("UPDATE menu_restaurant SET page=$1 WHERE id=$2 ", [req.body.page, req.body.id])
         }
-        result = await db.query("UPDATE menu_restaurant SET page=$1, menu_url=$2, WHERE id=$3", [req.body.page, image, req.body.id])
+        result = await db.query("UPDATE menu_restaurant SET page=$1, menu_url=$2 WHERE id=$3", [req.body.page, image, req.body.id])
 
         res.status(200).json({
             status: "success",
