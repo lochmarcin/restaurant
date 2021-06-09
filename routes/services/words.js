@@ -1,5 +1,3 @@
-
-
 const bad_words = array('chuj','chuja', 'chujek', 'chuju', 'chujem', 'chujnia',
 'chujowy', 'chujowa', 'chujowe', 'cipa', 'cipę', 'cipe', 'cipą',
 'cipie', 'dojebać','dojebac', 'dojebie', 'dojebał', 'dojebal',
@@ -124,3 +122,5 @@ const bad_words = array('chuj','chuja', 'chujek', 'chuju', 'chujem', 'chujnia',
 'zapierniczający', 'zasrać', 'zasranym', 'zasrywać', 'zasrywający',
 'zesrywać', 'zesrywający', 'zjebać', 'zjebac', 'zjebał', 'zjebal',
 'zjebała', 'zjebala', 'zjebana', 'zjebią', 'zjebali', 'zjeby');
+
+module.exports = bad_words

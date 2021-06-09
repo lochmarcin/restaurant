@@ -1,5 +1,5 @@
 Klient
-1. pobieranie danych o menu restauracji 
+usuwanie zdjęć podczas update w restauracji, menu - kopiuj z table delete
 
 
 

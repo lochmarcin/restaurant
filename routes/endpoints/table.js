@@ -137,7 +137,7 @@ router.get('/getAll/:id_rest', async (req, res) => {
 router.put('/update/:id ', async (req, res) => {
     console.log(req.body)
     try {
-        const result = await db.query("UPDATE tables SET numb_seats=$1 image_url=$1 returning *",
+        const result = await db.query("UPDATE tables SET numb_seats=$1 image_url=$2 returning *",
             [req.body.numb_seats, req.file.path])
         console.log(result.rows)
         res.status(200).json({
