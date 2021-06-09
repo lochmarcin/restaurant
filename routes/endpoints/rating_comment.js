@@ -5,8 +5,8 @@ const check_words = require("../services/check_words")
 
 const authenticate = require('../services/authenticate')
 
-router.get("test", async(req,res)=>{
-    console.log(check_words)
+router.get("/test", async(req,res)=>{
+    check_words()
 })
 
 router.post("/add", async(req,res)=>{

@@ -1,7 +1,7 @@
 const words = require("./words")
 
 
-const check_words = (req) => {
+const check_words = () => {
     console.log(words)
 }
 
