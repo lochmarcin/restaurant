@@ -134,8 +134,8 @@ router.get('/getAll/:id_rest', async (req, res) => {
 })
 
 // UPDATE TABLE     UPDATE TABLE
-router.put('/update/:id ',upload.single('image'),  async (req, res) => {
-
+router.put("/update/:id",upload.single('image'),  async (req, res) => {
+    console.log("update table")
     console.log(req.params)
     console.log(req.body)
     console.log(req.file)
