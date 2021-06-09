@@ -10,6 +10,7 @@ const restaurant = require('./endpoints/restaurant')
 const userEdit = require("./userSet/userEdit")
 const google = require("./auth/log_google")
 const facebook = require("./auth/log_fb")
+const comment = require("./endpoints/rating_comment")
 
 const reserwation = require("./endpoints/reserwation")
 const table = require("./endpoints/table")
@@ -53,8 +54,8 @@ router.use(session({
 }))
 
 
-router.use('/chuj', login)
 
+router.use('/comment', comment)
 router.use('/login', log)
 router.use('/google', google)
 router.use('/fb', facebook)
