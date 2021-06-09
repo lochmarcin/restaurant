@@ -52,14 +52,14 @@ router.delete('/delete/:id', async (req, res) => {
     }
 })
 
-// GET ONE TABLE 
-router.get('/get/:id_user', async (req, res) => {
-    console.log(req.body)
+// GET ONE TABLE - do edycji stolika 
+router.get('/getOne/:id', async (req, res) => {
+    // console.log(req.body)
     console.log(req.params)
     try {
-        const result = await db.query("SELECT * FROM restaurant WHERE id_user = $1",
-            [req.params.id_user])
-        console.log(result.rows)
+        const result = await db.query("SELECT * FROM tables WHERE id = $1",
+            [req.params.id])
+        console.log(result.rows[0])
         res.status(200).json({
             status: "success",
             data: {
@@ -134,11 +134,25 @@ router.get('/getAll/:id_rest', async (req, res) => {
 })
 
 // UPDATE TABLE     UPDATE TABLE
-router.put('/update/:id ', async (req, res) => {
+router.put('/update/:id ',upload.single('image'),  async (req, res) => {
+
+    console.log(req.params)
     console.log(req.body)
+    console.log(req.file)
+
+    const image = await imageProcess(req)
+    console.log(image)
+
     try {
-        const result = await db.query("UPDATE tables SET numb_seats=$1 image_url=$2 returning *",
+        let result
+        if (image == null) {
+        result = await db.query("UPDATE tables SET numb_seats=$1, number_table=$2 WHERE id=$3 returning *",
+            [req.body.numb_seats, req.params.id])
+        }
+        else{
+            result = await db.query("UPDATE tables SET numb_seats=$1, number_table=$2 image_url=$3 WHERE id=$4 returning *",
             [req.body.numb_seats, req.file.path])
+        }
         console.log(result.rows)
         res.status(200).json({
             status: "success",

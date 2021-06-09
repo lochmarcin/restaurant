@@ -29,7 +29,7 @@ router.delete("/delete/:id", async (req, res) => {
 router.put("/update/:id", upload.single('image'), async (req, res) => {
     console.log(req.params)
     console.log(req.body)
-    // console.log(req.file)
+    console.log(req.file)
 
     const image = await imageProcess(req)
     console.log(image)
