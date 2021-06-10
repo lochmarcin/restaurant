@@ -12,7 +12,7 @@ const imageProcess = async (req) => {
         return null
     }
     const formatedName = req.file.originalname.split(' ').join('_')
-    const fileName = new Date().toISOString().replace(/:/g, '-') + formatedName
+    const fileName = new Date().toISOString().replace(/:/gi, '-') + formatedName
     try {
         await sharp(req.file.buffer)
         .resize({width: 1000, height: null})

@@ -14,7 +14,9 @@ const multer = require("multer")
 // const { delete } = require('./reserwation')
 
 const storage = multer.memoryStorage()
-const upload = multer({storage}) 
+const upload = multer({
+    storage
+})
 
 
 router.use(bodyParser.json())
@@ -24,21 +26,21 @@ router.use(bodyParser.urlencoded({
 
 router.get("/me", async (req, res) => {
     res.status(200).json(req.user)
-  })
+})
 
 // DELETE ONE TABLE 
 router.delete('/delete/:id', async (req, res) => {
     console.log(req.body)
     console.log(req.params)
     try {
-        let del = await db.query("SELECT image_url FROM tables WHERE id = $1",[req.params.id])
+        let del = await db.query("SELECT image_url FROM tables WHERE id = $1", [req.params.id])
         del = del.rows[0].image_url
         del = del.split('/')
-        del = del[del.length-1]
-        
+        del = del[del.length - 1]
+
         let path = await dirname()
         path = `${path}\\uploads\\${del}`
-        
+
         console.log(path)
         fs.unlinkSync(path)
 
@@ -73,32 +75,32 @@ router.get('/getOne/:id', async (req, res) => {
 
 // wyślij tylko te które są dostępne na konkretny dzień
 // GET rezerwacje z konkretnej daty oraz restauracji 
-router.delete("/getByDate", async (req,res)=>{
+router.delete("/getByDate", async (req, res) => {
     // authenticate(req,res)
-    console.log(req.body) 
+    console.log(req.body)
 
     try {
         const date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
 
         const reserwation = await db.query("SELECT tables.id FROM tables FULL OUTER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
-            req.body.id_rest, date_booking ,
+            req.body.id_rest, date_booking,
         ])
-        let tables = await db.query("SELECT id, id_rest, numb_seats, number_table, image_url FROM tables WHERE id_rest=$1",[req.body.id_rest])
+        let tables = await db.query("SELECT id, id_rest, numb_seats, number_table, image_url FROM tables WHERE id_rest=$1", [req.body.id_rest])
 
         console.log("Rezerwacji: " + reserwation.rows.length)
         console.log("Stolików: " + tables.rows.length)
 
-        
+
         let response = []
         let del
-        for(let tab=0; tab<tables.rows.length;tab++){
+        for (let tab = 0; tab < tables.rows.length; tab++) {
             del = false
-            for(let res=0; res<reserwation.rows.length;res++){
-                if(tables.rows[tab].id == reserwation.rows[res].id)
+            for (let res = 0; res < reserwation.rows.length; res++) {
+                if (tables.rows[tab].id == reserwation.rows[res].id)
                     del = true
             }
-            if(del == false)
-            response.push(tables.rows[tab])
+            if (del == false)
+                response.push(tables.rows[tab])
             // response += tables.rows[tab]
         }
 
@@ -119,7 +121,7 @@ router.get('/getAll/:id_rest', async (req, res) => {
     console.log(req.body)
     console.log(req.params)
     try {
-           const result = await db.query("SELECT * FROM tables WHERE id_rest = $1",
+        const result = await db.query("SELECT * FROM tables WHERE id_rest = $1",
             [req.params.id_rest])
         console.log(result.rows)
         res.status(200).json({
@@ -134,7 +136,7 @@ router.get('/getAll/:id_rest', async (req, res) => {
 })
 
 // UPDATE TABLE     UPDATE TABLE
-router.put("/update:id", upload.single('image'),  async (req, res) => {
+router.put("/update:id", upload.single('image'), async (req, res) => {
     console.log("update table")
     console.log("param: " + req.params)
     console.log("body: " + req.body)
@@ -146,13 +148,12 @@ router.put("/update:id", upload.single('image'),  async (req, res) => {
     try {
         let result
         if (image == null) {
-        result = await db.query("UPDATE tables SET numb_seats=$1, number_table=$2 WHERE id=$3 returning *",
-            [req.body.numb_seats, req.body.number_table, req.params.id])
+            result = await db.query("UPDATE tables SET numb_seats=$1, number_table=$2 WHERE id=$3 returning *",
+                [req.body.numb_seats, req.body.number_table, req.params.id])
             console.log("brak zdjęcia :(")
-        }
-        else{
+        } else {
             result = await db.query("UPDATE tables SET numb_seats=$1, number_table=$2, image_url=$3 WHERE id=$4 returning *",
-            [req.body.numb_seats, req.body.number_table, image, req.params.id])
+                [req.body.numb_seats, req.body.number_table, image, req.params.id])
             console.log("zdjęcie :)")
         }
         console.log(result.rows)
@@ -169,10 +170,10 @@ router.put("/update:id", upload.single('image'),  async (req, res) => {
 router.post('/create', upload.single('image'), async (req, res) => {
     console.log('body', req.body)
     console.log('file', req.file)
-        
+
     const image = await imageProcess(req)
     console.log(image)
-    
+
     try {
         const result = await db.query("INSERT INTO tables (id_rest, numb_seats, image_url, number_table) VALUES ($1, $2, $3, $4) returning *",
             [req.body.id_rest, req.body.numb_seats, image, req.body.number_table])
@@ -193,10 +194,10 @@ router.post('/create', upload.single('image'), async (req, res) => {
 router.post('/create', upload.array('image', 100), async (req, res) => {
     console.log('body', req.body)
     console.log('file', req.files)
-        
+
     const image = await imageProcess(req)
     console.log(image)
-    
+
     // try {
     //     const result = await db.query("INSERT INTO tables (id_rest, numb_seats, imageUrl) VALUES ($1, $2, $3) returning *",
     //         [req.body.id_rest, req.body.numb_seats, image])
@@ -212,7 +213,7 @@ router.post('/create', upload.array('image', 100), async (req, res) => {
     // }
 })
 
-router.post("/test", (req,res)=>{
+router.post("/test", (req, res) => {
     const data = req.body
     res.send(data[2])
 })
