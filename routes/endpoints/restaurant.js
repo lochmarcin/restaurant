@@ -77,7 +77,7 @@ router.get('/getBasicInfo/:id_rest', async (req, res) => {
     try {
         let rate
         const rating = await db.query("SELECT ROUND(AVG(rating),2) AS avg FROM rating_comment WHERE id_rest=$1", [req.params.id_rest])
-        if (rating.rows[0] == null)
+        if (rating.rows[0].avg == null)
             rate = null
         else
             rate = rating.rows[0].avg.toString().split('.').join(',')
