@@ -148,10 +148,12 @@ router.put("/update/:id" ,upload.single('image'),  async (req, res) => {
         if (image == null) {
         result = await db.query("UPDATE tables SET numb_seats=$1, number_table=$2 WHERE id=$3 returning *",
             [req.body.numb_seats, req.body.number_table, req.params.id])
+            console.log("brak zdjęcia :(")
         }
         else{
             result = await db.query("UPDATE tables SET numb_seats=$1, number_table=$2 image_url=$3 WHERE id=$4 returning *",
             [req.body.numb_seats, req.body.number_table, image, req.params.id])
+            console.log("zdjęcie :)")
         }
         console.log(result.rows)
         res.status(200).json({
