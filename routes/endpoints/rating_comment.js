@@ -73,7 +73,7 @@ router.post("/add/:id", async (req, res) => {
 
     try {
         if (!bad_words(req.body.comment))
-            res.status(300).send("nie używaj brzydkich słów :(")
+            res.send("nie używaj brzydkich słów :(")
         else {
             const result = await db.query("INSERT INTO rating_comment (id_rest, rating, comment, id_user) VALUES ($1, $2, $3, $4) returning *", [
                 req.params.id_rest, req.body.rating, req.body.comment, 1
