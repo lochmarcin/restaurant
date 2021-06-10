@@ -11,7 +11,9 @@ const menu = require("./menuAdd")
 const multer = require("multer")
 
 const storage = multer.memoryStorage()
-const upload = multer({ storage })
+const upload = multer({
+    storage
+})
 
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({
@@ -55,10 +57,10 @@ router.get('/getByName/:name', async (req, res) => {
     }
 })
 
-router.get('/getInfo/:id_rest', async (req,res)=>{
+router.get('/getInfo/:id_rest', async (req, res) => {
     console.log(req.params)
     try {
-        const info = await db.query("SELECT name, description, category, phone, city, street, apart_number FROM restaurant WHERE id=$1",[req.params.id_rest])
+        const info = await db.query("SELECT name, description, category, phone, city, street, apart_number FROM restaurant WHERE id=$1", [req.params.id_rest])
         res.status(200).json({
             status: "success",
             data: {
@@ -70,19 +72,18 @@ router.get('/getInfo/:id_rest', async (req,res)=>{
     }
 })
 
-router.get('/getBasicInfo/:id_rest', async (req,res)=>{
+router.get('/getBasicInfo/:id_rest', async (req, res) => {
     console.log(req.params)
     try {
         let rate
-        const rating = await db.query("SELECT ROUND(AVG(rating),2) AS avg FROM rating_comment WHERE id_rest=$1",[req.params.id_rest])
-        console.log(rating.rows[0])
-        if(rating.rows[0] != null)
-            rate = rating.rows[0].avg.toString().split('.').join(',')
-        else
+        const rating = await db.query("SELECT ROUND(AVG(rating),2) AS avg FROM rating_comment WHERE id_rest=$1", [req.params.id_rest])
+        if (rating.rows[0] == null)
             rate = null
+        else
+            rate = rating.rows[0].avg.toString().split('.').join(',')
 
         console.log(rate)
-        const info = await db.query("SELECT name, image_url FROM restaurant WHERE id=$1",[req.params.id_rest])
+        const info = await db.query("SELECT name, image_url FROM restaurant WHERE id=$1", [req.params.id_rest])
         res.status(200).json({
             status: "success",
             data: {
@@ -90,7 +91,7 @@ router.get('/getBasicInfo/:id_rest', async (req,res)=>{
                 image_url: info.rows[0].image_url,
                 avg: rate
             }
-            
+
         })
     } catch (err) {
         console.log(err)
