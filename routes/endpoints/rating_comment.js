@@ -72,18 +72,18 @@ router.post("/add/:id", async (req, res) => {
     console.log(req.params.id)
 
     try {
-        if (!bad_words(req.body.comment))
+        if (bad_words(req.body.comment))
             res.send("nie używaj brzydkich słów :(")
         else {
             const result = await db.query("INSERT INTO rating_comment (id_rest, rating, comment, id_user) VALUES ($1, $2, $3, $4) returning *", [
-                req.params.id_rest, req.body.rating, req.body.comment, 1
+                req.params.id, req.body.rating, req.body.comment, 1
                 // req.user.id
             ])
             console.log(result.rows[0])
             res.status(200).json({
                 status: "success",
                 data: {
-                    tables: result.rows[0],
+                    comment: result.rows[0],
                 }
             })
         }
