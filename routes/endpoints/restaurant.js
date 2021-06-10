@@ -24,6 +24,7 @@ router.use('/menu', menu)
 router.get('/getAll', async (req, res) => {
     console.log(req.body)
     try {
+
         const result = await db.query("SELECT * FROM restaurant")
         console.log(result.rows)
         res.status(200).json({
@@ -63,6 +64,26 @@ router.get('/getInfo/:id_rest', async (req,res)=>{
             data: {
                 restaurant: info.rows[0],
             }
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.get('/getBasicInfo/:id_rest', async (req,res)=>{
+    console.log(req.params)
+    try {
+        const rating = await db.query("SELECT AVG(rating) FROM rating_comment WHERE id_rest=$1",[req.params.id_rest])
+        console.log(rating.rows[0])
+
+        const info = await db.query("SELECT name, image_url FROM restaurant WHERE id=$1",[req.params.id_rest])
+        res.status(200).json({
+            status: "success",
+            data: {
+                restaurant: info.rows[0],
+                avg:rating.rows[0]
+            }
+            
         })
     } catch (err) {
         console.log(err)

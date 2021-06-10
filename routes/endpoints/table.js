@@ -119,7 +119,7 @@ router.get('/getAll/:id_rest', async (req, res) => {
     console.log(req.body)
     console.log(req.params)
     try {
-        const result = await db.query("SELECT * FROM tables WHERE id_rest = $1",
+           const result = await db.query("SELECT * FROM tables WHERE id_rest = $1",
             [req.params.id_rest])
         console.log(result.rows)
         res.status(200).json({
