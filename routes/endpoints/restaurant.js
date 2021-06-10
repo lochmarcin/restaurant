@@ -73,19 +73,22 @@ router.get('/getInfo/:id_rest', async (req,res)=>{
 router.get('/getBasicInfo/:id_rest', async (req,res)=>{
     console.log(req.params)
     try {
-        let rating = await db.query("SELECT ROUND(AVG(rating),2) AS avg FROM rating_comment WHERE id_rest=$1",[req.params.id_rest])
+        let rate
+        const rating = await db.query("SELECT ROUND(AVG(rating),2) AS avg FROM rating_comment WHERE id_rest=$1",[req.params.id_rest])
+        console.log(rating.rows[0])
         if(rating.rows[0] != null)
-            rating = rating.rows[0].avg.toString().split('.').join(',')
+            rate = rate.rows[0].avg.toString().split('.').join(',')
         else
-            rating = null
+            rate = null
 
+        console.log(rate)
         const info = await db.query("SELECT name, image_url FROM restaurant WHERE id=$1",[req.params.id_rest])
         res.status(200).json({
             status: "success",
             data: {
                 name: info.rows[0].name,
                 image_url: info.rows[0].image_url,
-                avg: rating
+                avg: rate
             }
             
         })
