@@ -2,6 +2,7 @@ Klient
 usuwanie zdjęć podczas update w restauracji, menu - kopiuj z table delete
 pobieranie id restauracji 
 rezerwacja na przyszszłą date 
+logowanie 
 
 
 
