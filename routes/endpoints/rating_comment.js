@@ -17,19 +17,77 @@ const bad_words = require("../services/check_words")
 
 // })
 
-router.post("/add", async (req, res) => {
-    // authenticate(req,res)
-    console.log(req.body)
+router.delete("/delete/:id", async (req, res) => {
+    console.log(req.params)
 
     try {
-
-
-        const result = await db.query("INSERT INTO rating_comment (id_rest, rating, comment, id_user) VALUES ($1, $2, $3, $4) ", [
-            req.body.id_rest, req.body.rating, req.body.comment
-            // ,req.user.id
+        const result = await db.query("DELETE FROM rating_comment WHERE id=$1", [
+            req.params.id
         ])
-
+        console.log(result.rows)
         res.sendStatus(200)
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.get("/getOne/:id", async (req, res) => {
+    console.log(req.params)
+
+    try {
+        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1", )
+        console.log(result.rows)
+        res.status(200).json({
+            status: "success",
+            data: {
+                comments: result.rows
+            }
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+// pobieranie wszystkich komentarzy dla danej restauracji 
+router.get("/getAll/:id", async (req, res) => {
+    console.log(req.params)
+
+    try {
+        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1", )
+        console.log(result.rows)
+        res.status(200).json({
+            status: "success",
+            data: {
+                comments: result.rows
+            }
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.post("/add/:id", async (req, res) => {
+    // authenticate(req,res)
+    console.log(req.body)
+    console.log(req.params.id)
+
+    try {
+        if (!bad_words(req.body.comment))
+            res.status(300).send("nie używaj brzydkich słów :(")
+        else {
+            const result = await db.query("INSERT INTO rating_comment (id_rest, rating, comment, id_user) VALUES ($1, $2, $3, $4) returning *", [
+                req.params.id_rest, req.body.rating, req.body.comment, 1
+                // req.user.id
+            ])
+            console.log(result.rows[0])
+            res.status(200).json({
+                status: "success",
+                data: {
+                    tables: result.rows[0],
+                }
+            })
+        }
+
     } catch (err) {
         console.log(err)
     }

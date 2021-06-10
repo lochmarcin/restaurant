@@ -134,11 +134,11 @@ router.get('/getAll/:id_rest', async (req, res) => {
 })
 
 // UPDATE TABLE     UPDATE TABLE
-router.put("/update/:id" ,upload.single('image'),  async (req, res) => {
+router.put("/update:id", upload.single('image'),  async (req, res) => {
     console.log("update table")
-    console.log("param: " +req.params)
+    console.log("param: " + req.params)
     console.log("body: " + req.body)
-    console.log(req.file)
+    // console.log(req.file)
 
     const image = await imageProcess(req)
     console.log(image)
@@ -151,7 +151,7 @@ router.put("/update/:id" ,upload.single('image'),  async (req, res) => {
             console.log("brak zdjęcia :(")
         }
         else{
-            result = await db.query("UPDATE tables SET numb_seats=$1, number_table=$2 image_url=$3 WHERE id=$4 returning *",
+            result = await db.query("UPDATE tables SET numb_seats=$1, number_table=$2, image_url=$3 WHERE id=$4 returning *",
             [req.body.numb_seats, req.body.number_table, image, req.params.id])
             console.log("zdjęcie :)")
         }
