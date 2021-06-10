@@ -83,7 +83,7 @@ router.get('/getBasicInfo/:id_rest', async (req,res)=>{
             data: {
                 name: info.rows[0].name,
                 image_url: info.rows[0].image_url,
-                avg:rate
+                avg: rate
             }
             
         })
