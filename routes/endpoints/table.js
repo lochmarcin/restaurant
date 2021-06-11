@@ -88,9 +88,12 @@ router.get("/getByDate/:id", async (req, res) => {
         if (req.body.year == null) {
             date_booking = new Date().toJSON()
             date_booking = date_booking.slice(0, 10)
-        } else
+            console.log(date_booking)
+        } else{
             date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
-
+            console.log(date_booking)
+        
+        }
 
         const reserwation = await db.query("SELECT tables.id FROM tables FULL OUTER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
             req.params.id, date_booking,
