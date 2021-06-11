@@ -42,7 +42,7 @@ router.get("/getAll/:id", async (req, res) => {
     console.log(req.params)
 
     try {
-        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1 ORDER BY date_comment DESC", [req.params.id])
+        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1 ORDER BY date_comment ASC", [req.params.id])
         console.log(result.rows)
         res.status(200).json({
             status: "success",
