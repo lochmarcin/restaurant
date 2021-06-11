@@ -17,7 +17,7 @@ router.delete("/delete/:id", async (req, res) => {
     console.log(req.params)
 
     try {
-        const del = await db.query("SELECT menu_url FROM menu_restaurant WHERE id=$1", [req.params.id])
+        const del = await db.query("SELECT image_url FROM menu_restaurant WHERE id=$1", [req.params.id])
         delete_photo(del)
 
         const result = await db.query("DELETE FROM menu_restaurant WHERE id=$1", [req.params.id])
@@ -44,10 +44,11 @@ router.put("/update/:id", upload.single('image'), async (req, res) => {
             result = await db.query("UPDATE menu_restaurant SET page=$1 WHERE id=$2 ", [req.body.page, req.params.id])
             console.log("bez zdjęcia")
         } else {
-            const del = await db.query("SELECT menu_url FROM menu_restaurant WHERE id=$1", [req.params.id])
+            const del = await db.query("SELECT image_url FROM menu_restaurant WHERE id=$1", [req.params.id])
+            console.log(del)
             delete_photo(del)
 
-            result = await db.query("UPDATE menu_restaurant SET page=$1, menu_url=$2 WHERE id=$3", [req.body.page, image, req.params.id])
+            result = await db.query("UPDATE menu_restaurant SET page=$1, image_url=$2 WHERE id=$3", [req.body.page, image, req.params.id])
         }
 
         res.status(200).json({
@@ -87,7 +88,7 @@ router.get("/get/:id_rest", async (req, res) => {
     console.log(req.params)
 
     try {
-        const result = await db.query("SELECT id, page, menu_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [req.params.id_rest])
+        const result = await db.query("SELECT id, page, image_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [req.params.id_rest])
 
         console.log(result.rows)
         res.status(200).json({
@@ -112,7 +113,7 @@ router.post("/add", upload.single('image'), async (req, res) => {
     console.log(image)
 
     try {
-        const result = await db.query("INSERT INTO menu_restaurant (menu_url,page, id_rest) VALUES ($1,$2,$3) returning *", [image, req.body.page, req.body.id_rest])
+        const result = await db.query("INSERT INTO menu_restaurant (image_url,page, id_rest) VALUES ($1,$2,$3) returning *", [image, req.body.page, req.body.id_rest])
         console.log(result.rows)
 
 
