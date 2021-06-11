@@ -13,6 +13,7 @@ const delete_photo = async (del) => {
 
         console.log(path)
         fs.unlinkSync(path)
+        console.log("powinno usunąć ;)")
     } catch (err) {
         console.log(err)
     }
