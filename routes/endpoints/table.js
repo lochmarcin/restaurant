@@ -79,17 +79,23 @@ router.get('/getOne/:id', async (req, res) => {
 
 // wyślij tylko te które są dostępne na konkretny dzień
 // GET rezerwacje z konkretnej daty oraz restauracji 
-router.delete("/getByDate", async (req, res) => {
+router.get("/getByDate/:id", async (req, res) => {
     // authenticate(req,res)
     console.log(req.body)
 
     try {
-        const date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
+        let date_booking
+        if (req.body.year == null) {
+            date_booking = new Date().toJSON()
+            date_booking = date_booking.slice(0, 10)
+        } else
+            date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
+
 
         const reserwation = await db.query("SELECT tables.id FROM tables FULL OUTER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
-            req.body.id_rest, date_booking,
+            req.params.id, date_booking,
         ])
-        let tables = await db.query("SELECT id, id_rest, numb_seats, number_table, image_url FROM tables WHERE id_rest=$1", [req.body.id_rest])
+        let tables = await db.query("SELECT id, id_rest, numb_seats, number_table, image_url FROM tables WHERE id_rest=$1", [req.params.id])
 
         console.log("Rezerwacji: " + reserwation.rows.length)
         console.log("Stolików: " + tables.rows.length)
