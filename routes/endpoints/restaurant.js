@@ -7,6 +7,7 @@ const Restaurant = require('../../schema/restaurantSchema')
 
 const imageProcess = require('./../services/imageProcess')
 const menu = require("./menuAdd")
+const openTime = require("./open_time")
 
 // const authenticate = require('../services/authenticate')
 
@@ -23,6 +24,7 @@ router.use(bodyParser.urlencoded({
 }))
 
 router.use('/menu', menu)
+router.use('/openTime', openTime)
 
 // GET ALL RESTAURANT         GET ALL RESTAURANT
 router.get('/getAll', async (req, res) => {
@@ -98,7 +100,7 @@ router.get('/getBasicInfo/:id_rest', async (req, res) => {
         if (rating.rows[0].avg == null)
             rate = null
         else
-            rate = rating.rows[0].avg.toString().split('.').join(',')
+            rate = rating.rows[0].avg
 
         console.log(rate)
         const info = await db.query("SELECT name, image_url FROM restaurant WHERE id=$1", [req.params.id_rest])
