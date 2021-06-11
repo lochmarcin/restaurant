@@ -9,6 +9,7 @@ const upload = multer({
 })
 
 const imageProcess = require('./../services/imageProcess')
+const delete_photo = require('../services/delete_photo')
 
 
 // usuwanie jednej strony menu
@@ -16,6 +17,9 @@ router.delete("/delete/:id", async (req, res) => {
     console.log(req.params)
 
     try {
+        const del = await db.query("SELECT menu_url FROM menu_restaurant WHERE id=$1", [req.params.id])
+        delete_photo(del)
+
         const result = await db.query("DELETE FROM menu_restaurant WHERE id=$1", [req.params.id])
         res.status(200).json({
             status: "success"
@@ -39,6 +43,9 @@ router.put("/update/:id", upload.single('image'), async (req, res) => {
             result = await db.query("UPDATE menu_restaurant SET page=$1 WHERE id=$2 ", [req.body.page, req.params.id])
             console.log("bez zdjęcia")
         } else {
+            const del = await db.query("SELECT menu_url FROM menu_restaurant WHERE id=$1", [req.params.id])
+            delete_photo(del)
+
             result = await db.query("UPDATE menu_restaurant SET page=$1, menu_url=$2 WHERE id=$3", [req.body.page, image, req.params.id])
         }
 

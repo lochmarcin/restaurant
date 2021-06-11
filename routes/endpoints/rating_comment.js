@@ -5,17 +5,6 @@ const bad_words = require("../services/check_words")
 
 // const authenticate = require('../services/authenticate')
 
-// let zdanie = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-
-// router.get("/test", (req, res) => {
-//     console.log(bad_words(zdanie))
-//     if (bad_words(zdanie))
-//         console.log(":(")
-//     else {
-//         console.log(":)")
-//     }
-
-// })
 
 router.delete("/delete/:id", async (req, res) => {
     console.log(req.params)
@@ -35,7 +24,7 @@ router.get("/getOne/:id", async (req, res) => {
     console.log(req.params)
 
     try {
-        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1", )
+        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1",)
         console.log(result.rows)
         res.status(200).json({
             status: "success",
@@ -53,7 +42,7 @@ router.get("/getAll/:id", async (req, res) => {
     console.log(req.params)
 
     try {
-        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1 ORDER BY date_comment ASC",[req.params.id] )
+        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1 ORDER BY date_comment ASC", [req.params.id])
         console.log(result.rows)
         res.status(200).json({
             status: "success",
@@ -80,12 +69,13 @@ router.post("/add/:id", async (req, res) => {
                 // req.user.id
             ])
             console.log(result.rows[0])
-            res.status(200).json({
-                status: "success",
-                data: {
-                    comment: result.rows[0],
-                }
-            })
+            res.status(200)
+            // .json({
+            //     status: "success",
+            //     data: {
+            //         comment: result.rows[0],
+            //     }
+            // })
         }
 
     } catch (err) {
