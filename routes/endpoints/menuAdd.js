@@ -31,9 +31,10 @@ router.delete("/delete/:id", async (req, res) => {
 
 //aktualizacja jednej strony menu
 router.put("/update/:id", upload.single('image'), async (req, res) => {
+    console.log("UPDATE MENU")
     console.log(req.params)
     console.log(req.body)
-    console.log(req.file)
+    // console.log(req.file)
 
     const image = await imageProcess(req)
     console.log(image)
