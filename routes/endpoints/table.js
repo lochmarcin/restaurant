@@ -118,7 +118,8 @@ router.get("/getByDate/:id", async (req, res) => {
         res.status(200).json({
             status: "success",
             data: {
-                tables: response
+                tables: response,
+                date_booking: date_booking
             }
         })
     } catch (err) {
