@@ -156,6 +156,9 @@ router.put("/update:id", upload.single('image'), async (req, res) => {
                 [req.body.numb_seats, req.body.number_table, req.params.id])
             console.log("brak zdjęcia :(")
         } else {
+            let del = await db.query("SELECT image_url FROM tables WHERE id = $1", [req.params.id])
+            delete_photo(del)
+            
             result = await db.query("UPDATE tables SET numb_seats=$1, number_table=$2, image_url=$3 WHERE id=$4 returning *",
                 [req.body.numb_seats, req.body.number_table, image, req.params.id])
             console.log("zdjęcie :)")
