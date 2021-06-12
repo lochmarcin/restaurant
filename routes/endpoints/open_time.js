@@ -9,7 +9,7 @@ router.get("/get/:id", async (req,res) => {
     // authenticate(req,res)
     // zmień na id resturacji 
 
-    const id_rest = 1 //req.params.id
+    const id_rest = req.params.id
 
     try {
         const result = await db.query("SELECT * FROM open_time WHERE id_rest=$1",[id_rest])
@@ -31,7 +31,7 @@ router.put('/update/:id', async (req,res) => {
     // dodaj w parametrach id restauracji /:id
     // console.log("params" + req.params)
 
-    const id_rest = 1 //req.params.id
+    const id_rest = req.params.id
 
     let time = {mon_open, mon_close, tue_open, tue_close, wed_open, wed_close, thu_open, thu_close, fri_open, fri_close, sat_open, sat_close, sun_open, sun_close} = req.body
 
