@@ -95,18 +95,16 @@ router.post("/getByDate/:id", async (req, res) => {
     console.log(req.body)
 
     try {
+        let today
         let date_booking
 
-        console.log(req.body.year==null ? "null": "nie null")
+        req.body.year == null ? today=true : today=false
 
-        if(req.body.year == null){
-            date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
-            console.log(date_booking)
+        if(today){
+            date_booking = moment().local().format("YYYY-MM-D")
         }
         else{
-            date_booking = moment().local().format("YYYY-MM-D")
-            console.log(date_booking)
-
+            date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
         }
         
             

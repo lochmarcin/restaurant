@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const db = require("../../db")
 const authenticate = require('../services/authenticate')
+const check_date_time_reserwation = require('../services/check_date_time_reserwation')
 
 
 
@@ -32,6 +33,14 @@ router.get("/get", async (req, res) => {
     } catch (err) {
         console.log(err)
     }
+})
+
+
+router.post("/check", async(req,res)=>{
+    const date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
+    const time_booking = `${req.body.hour}:${req.body.min}:00`
+
+    check_date_time_reserwation(date_booking,time_booking)
 })
 
 // TWORZENIE REZERWACJI 
