@@ -14,6 +14,7 @@ const moment = require('moment'); // require
 moment().format(); 
 
 const multer = require("multer")
+const console = require('console')
 // const { delete } = require('./reserwation')
 // const { delete } = require('./reserwation')
 
@@ -99,6 +100,8 @@ router.post("/getByDate/:id", async (req, res) => {
         let date_booking
 
         req.body.year == null ? today=false : today=true
+
+        console.log(req.body.year == null)
 
         if(today){
             date_booking = moment().local().format("YYYY-MM-D")
