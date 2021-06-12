@@ -90,7 +90,7 @@ router.get('/getOne/:id', async (req, res) => {
 
 // wyślij tylko te które są dostępne na konkretny dzień
 // GET rezerwacje z konkretnej daty oraz restauracji 
-router.get("/getByDate/:id", async (req, res) => {
+router.post("/getByDate/:id", async (req, res) => {
     // authenticate(req,res)
     console.log(req.body)
 
