@@ -11,7 +11,7 @@ const imageProcess = require('./../services/imageProcess')
 const delete_photo = require('../services/delete_photo')
 
 const moment = require('moment'); // require
-moment().format(); 
+moment().format();
 
 const multer = require("multer")
 const console = require('console')
@@ -33,7 +33,7 @@ router.get("/date", async (req, res) => {
     let data = moment().local().format()
     // .format("YYYY-MM-D")
     let data1 = moment().utcOffset(120).format()
-    
+
     console.log(data)
 
     console.log(data1)
@@ -89,66 +89,64 @@ router.get('/getOne/:id', async (req, res) => {
     }
 })
 
+
+router.post("/getByDate/:id", async (req,res)=>{
+    try {
+        let date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
+        console.log("date_booking: " + date_booking)
+        
+        await getTables(req, res , date_booking)
+
+    } catch (err) {
+        console.log(err)
+    }
+})
 // wyślij tylko te które są dostępne na konkretny dzień
 // GET rezerwacje z konkretnej daty oraz restauracji 
-router.post("/getByDate/:id", async (req, res) => {
+router.post("/getTableToday/:id", async (req, res) => {
     // authenticate(req,res)
     console.log(req.body)
 
     try {
-        let today
-        let date_booking
-
-        req.body.year == null ? today=true : today=false
-
-        console.log(req.body.year == null)
-
-        if(today){
-            date_booking = moment().local().format("YYYY-MM-D")
-            console.log("moment")
-        }
-        else{
-            date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
-            console.log("ręcznie data")
-        }
-        
-            
-            
-        
-        console.log("date_booking: " + date_booking)
-
-        const reserwation = await db.query("SELECT tables.id FROM tables FULL OUTER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
-            req.params.id, date_booking,
-        ])
-        let tables = await db.query("SELECT id, id_rest, numb_seats, number_table, image_url FROM tables WHERE id_rest=$1", [req.params.id])
-
-        console.log("Rezerwacji: " + reserwation.rows.length)
-        console.log("Stolików: " + tables.rows.length)
-
-
-        let response = []
-        let del
-        for (let tab = 0; tab < tables.rows.length; tab++) {
-            del = false
-            for (let res = 0; res < reserwation.rows.length; res++) {
-                if (tables.rows[tab].id == reserwation.rows[res].id)
-                    del = true
-            }
-            if (del == false)
-                response.push(tables.rows[tab])
-            // response += tables.rows[tab]
-        }
+ 
+        let date_booking = moment().local().format("YYYY-MM-D")
 
         console.log("date_booking: " + date_booking)
-        console.log("Wolnych stolików: " + response.length)
-        res.status(200).json({
-            status: "success",
-            data: {
-                tables: response,
-            },
-            date_booking: date_booking
-        })
-        console.log("------------------------------------------")
+
+        await getTables(req, res , date_booking)
+
+        // const reserwation = await db.query("SELECT tables.id FROM tables FULL OUTER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
+        //     req.params.id, date_booking,
+        // ])
+        // let tables = await db.query("SELECT id, id_rest, numb_seats, number_table, image_url FROM tables WHERE id_rest=$1", [req.params.id])
+
+        // console.log("Rezerwacji: " + reserwation.rows.length)
+        // console.log("Stolików: " + tables.rows.length)
+
+
+        // let response = []
+        // let del
+        // for (let tab = 0; tab < tables.rows.length; tab++) {
+        //     del = false
+        //     for (let res = 0; res < reserwation.rows.length; res++) {
+        //         if (tables.rows[tab].id == reserwation.rows[res].id)
+        //             del = true
+        //     }
+        //     if (del == false)
+        //         response.push(tables.rows[tab])
+        //     // response += tables.rows[tab]
+        // }
+
+        // console.log("date_booking: " + date_booking)
+        // console.log("Wolnych stolików: " + response.length)
+        // res.status(200).json({
+        //     status: "success",
+        //     data: {
+        //         tables: response,
+        //     },
+        //     date_booking: date_booking
+        // })
+        // console.log("------------------------------------------")
     } catch (err) {
         console.log(err)
     }
@@ -231,34 +229,46 @@ router.post('/create', upload.single('image'), async (req, res) => {
 })
 
 
-// CREATE  MANY MAAAAAANYYYYYYYYYYYYY  TABLES    CREATE TABLE    
-router.post('/create', upload.array('image', 100), async (req, res) => {
-    console.log('body', req.body)
-    console.log('file', req.files)
 
-    const image = await imageProcess(req)
-    console.log(image)
+const getTables = async (req, res , date_booking) => {
 
-    // try {
-    //     const result = await db.query("INSERT INTO tables (id_rest, numb_seats, imageUrl) VALUES ($1, $2, $3) returning *",
-    //         [req.body.id_rest, req.body.numb_seats, image])
-    //     console.log(result.rows)
-    //     res.status(200).json({
-    //         status: "success",
-    //         data: {
-    //             users: result.rows[0],
-    //         }
-    //     })
-    // } catch (err) {
-    //     console.log(err)
-    // }
-})
+    try {
+        const reserwation = await db.query("SELECT tables.id FROM tables FULL OUTER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
+            req.params.id, date_booking,
+        ])
+        let tables = await db.query("SELECT id, id_rest, numb_seats, number_table, image_url FROM tables WHERE id_rest=$1", [req.params.id])
 
-router.post("/test", (req, res) => {
-    const data = req.body
-    res.send(data[2])
-})
+        console.log("Rezerwacji: " + reserwation.rows.length)
+        console.log("Stolików: " + tables.rows.length)
 
+
+        let response = []
+        let del
+        for (let tab = 0; tab < tables.rows.length; tab++) {
+            del = false
+            for (let res = 0; res < reserwation.rows.length; res++) {
+                if (tables.rows[tab].id == reserwation.rows[res].id)
+                    del = true
+            }
+            if (del == false)
+                response.push(tables.rows[tab])
+            // response += tables.rows[tab]
+        }
+
+        console.log("date_booking: " + date_booking)
+        console.log("Wolnych stolików: " + response.length)
+        res.status(200).json({
+            status: "success",
+            data: {
+                tables: response,
+            },
+            date_booking: date_booking
+        })
+        console.log("------------------------------------------")
+    } catch (err) {
+        console.log(err)
+    }
+}
 
 
 module.exports = router
