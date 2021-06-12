@@ -96,14 +96,13 @@ router.get("/getByDate/:id", async (req, res) => {
 
     try {
         let date_booking
-        if (req.body.year == null) {
+        if (req.body.year == null) 
             date_booking = moment().local().format("YYYY-MM-D")
-            console.log("data z kompa: " + date_booking)
-        } else{
+        else
             date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
-            console.log("data: " + date_booking)
+            
         
-        }
+        
 
         const reserwation = await db.query("SELECT tables.id FROM tables FULL OUTER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
             req.params.id, date_booking,
@@ -127,6 +126,7 @@ router.get("/getByDate/:id", async (req, res) => {
             // response += tables.rows[tab]
         }
 
+        console.log("date_booking: " + date_booking)
         console.log("Wolnych stolików: " + response.length)
         res.status(200).json({
             status: "success",
