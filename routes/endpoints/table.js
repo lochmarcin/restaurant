@@ -10,7 +10,8 @@ const imageProcess = require('./../services/imageProcess')
 // const dirname = require('../../dirname')
 const delete_photo = require('../services/delete_photo')
 
-
+const moment = require('moment'); // require
+moment().format(); 
 
 const multer = require("multer")
 // const { delete } = require('./reserwation')
@@ -26,6 +27,16 @@ router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({
     extended: true
 }))
+
+router.get("/date", async (req, res) => {
+    let data = moment().local().format()
+    // .format("YYYY-MM-D")
+    let data1 = moment().utcOffset(120).format()
+    
+    console.log(data)
+
+    console.log(data1)
+})
 
 router.get("/me", async (req, res) => {
     res.status(200).json(req.user)
@@ -86,8 +97,7 @@ router.get("/getByDate/:id", async (req, res) => {
     try {
         let date_booking
         if (req.body.year == null) {
-            date_booking = new Date().toJSON()
-            date_booking = date_booking.slice(0, 10)
+            date_booking = moment().local().format("YYYY-MM-D")
             console.log(date_booking)
         } else{
             date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
