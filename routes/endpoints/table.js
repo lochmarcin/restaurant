@@ -148,6 +148,7 @@ router.post("/getByDate/:id", async (req, res) => {
             },
             date_booking: date_booking
         })
+        console.log("------------------------------------------")
     } catch (err) {
         console.log(err)
     }
