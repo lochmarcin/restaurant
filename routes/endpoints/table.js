@@ -98,10 +98,10 @@ router.get("/getByDate/:id", async (req, res) => {
         let date_booking
         if (req.body.year == null) {
             date_booking = moment().local().format("YYYY-MM-D")
-            console.log(date_booking)
+            console.log("data z kompa: " + date_booking)
         } else{
             date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
-            console.log(date_booking)
+            console.log("data: " + date_booking)
         
         }
 
