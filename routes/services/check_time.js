@@ -9,6 +9,8 @@ const check_time = (time,res) => {
     console.log(entries)
     let correct = true
     for(let i=0;i<entries.length;i++){
+        if(entries[i][1]==null)
+            entries[i][1]="00:00"
         if(entries[i][1].includes(":") != true || entries[i][1].length != 5)
             correct = false
         let time = entries[i][1].split(":")
