@@ -233,6 +233,7 @@ router.post('/create', upload.single('image'), async (req, res) => {
 const getTables = async (req, res , date_booking) => {
 
     try {
+        console.log(date_booking)
         const reserwation = await db.query("SELECT tables.id FROM tables FULL OUTER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
             req.params.id, date_booking,
         ])
