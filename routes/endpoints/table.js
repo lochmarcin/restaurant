@@ -97,9 +97,9 @@ router.post("/getByDate/:id", async (req, res) => {
     try {
         let date_booking
 
-        console.log(req.body.year!=null ? "null": "nie null")
+        console.log(req.body.year==null ? "null": "nie null")
 
-        if(req.body.year != null){
+        if(req.body.year == null){
             date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
             console.log(date_booking)
         }
