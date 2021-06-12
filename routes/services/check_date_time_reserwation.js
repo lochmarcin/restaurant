@@ -14,6 +14,13 @@ const check_date_time_reserwation = (date_booking, time_booking) => {
     else{
         console.log("chuja")
     }
+    if(time_booking > moment().local().format("HH-mm")){
+        console.log("godzina większa :)")
+    }
+    else{
+        console.log("chuja")
+    }
+    
     
 }
 

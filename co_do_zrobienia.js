@@ -2,7 +2,7 @@ Klient
 # usuwanie zdjęć podczas update w restauracji, menu - kopiuj z table delete
 # Pobieranie po nazwie i mieście z oceną
 
-
+godziny otwarcia zamknięcia 
 pobieranie id restauracji
 rezerwacja na przyszszłą date
 logowanie
