@@ -17,7 +17,7 @@ const check_time = (time,res) => {
     }
     if(correct == false){
         console.log("Błędne godziny! Poprawnie np. 12:30")
-        res.status(300).send("Błędne godziny! Poprawnie np. 12:30")
+        res.send("Błędne godziny! Poprawnie np. 12:30")
         return false
     }
     else
