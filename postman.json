@@ -1,0 +1,18 @@
+// dodawanie godzin 
+// post localhost:5000/restaurant/openTime/add/:id
+{
+    "mon_open": "12:30",
+    "mon_close": "22:00",
+    "tue_open": "12:30",
+    "tue_close": "22:00",
+    "wed_open": "12:30",
+    "wed_close": "22:00",
+    "thu_open": "12:30",
+    "thu_close": "22:00",
+    "fri_open": "12:30",
+    "fri_close": "22:00",
+    "sat_open": "12:30",
+    "sat_close": "22:00",
+    "sun_open": "12:30",
+    "sun_close": "22:00"
+}

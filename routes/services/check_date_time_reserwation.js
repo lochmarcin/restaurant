@@ -1,27 +1,27 @@
 const db = require("../../db")
 
 const moment = require('moment'); // require
-moment().format(); 
+moment().format();
 
 const check_date_time_reserwation = (date_booking, time_booking) => {
-    console.log(time_booking)
-    console.log(date_booking)
+    console.log("time_booking: " + time_booking + " moment: " + moment().local().format("HH-mm"))
+    console.log("date_booking: " + date_booking + " moment: " + moment().local().format("YYYY-MM-D"))
 
     let correct = true
-    if(date_booking > moment().local().format("YYYY-MM-D")){
+    if (date_booking > moment().local().format("YYYY-MM-D")) {
         console.log("data większa :)")
     }
-    else{
+    else {
         console.log("chuja")
     }
-    if(time_booking > moment().local().format("HH-mm")){
+    if (time_booking > moment().local().format("HH-mm")) {
         console.log("godzina większa :)")
     }
-    else{
+    else {
         console.log("chuja")
     }
-    
-    
+
+
 }
 
 module.exports = check_date_time_reserwation
