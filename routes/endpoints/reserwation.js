@@ -9,7 +9,7 @@ const check_date_time_reserwation = require('../services/check_date_time_reserwa
 
 // usuwanie rezerwacji 
 router.delete("/delete/:id", async (req, res) => {
-    authenticate(req, res)
+    // authenticate(req, res)
     console.log(req.params.id)
     try {
         const del = await db.query("DELETE FROM reserwation WHERE id=$1", [
@@ -20,6 +20,7 @@ router.delete("/delete/:id", async (req, res) => {
         console.log(err)
     }
 })
+
 
 // GET INFO All to restaurant 
 router.get("/getAll/:id", async (req, res) => {
