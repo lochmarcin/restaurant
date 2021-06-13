@@ -46,7 +46,7 @@ router.post("/check", async (req, res) => {
 
 // TWORZENIE REZERWACJI 
 router.post("/create/:id", async (req, res) => {
-    authenticate(req, res)
+    // authenticate(req, res)
 
     console.log('body', req.body)
 
@@ -63,8 +63,8 @@ router.post("/create/:id", async (req, res) => {
 
 
         const reserwation = await db.query("INSERT INTO reserwation (id_user, id_restaurant, id_table, time_reserwation, time_booking, date_booking) VALUES ($1,$2,$3,$4,$5,$6)", [
-            req.user.id,
-            // req.params.id,
+            // req.user.id,
+            req.params.id,
             req.body.id_restaurant, req.body.id_table, new Date().toJSON(), time_booking, date_booking
         ])
         res.status(200).send("Zarezerwowano ! :)")
