@@ -11,6 +11,9 @@ const check_date_time_reserwation = (date_booking, time_booking) => {
     if (date_booking > moment().local().format("YYYY-MM-D")) {
         console.log("data większa :)")
     }
+    if (date_booking == "2021-06-30") {
+        console.log("data == 2021-06-30")
+    }
     else {
         console.log("chuja")
     }
