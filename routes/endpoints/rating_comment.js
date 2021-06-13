@@ -14,7 +14,7 @@ router.delete("/delete/:id", async (req, res) => {
             req.params.id
         ])
         console.log(result.rows)
-        res.sendStatus(200)
+        res.status(200).send("Usunięto komentarz")
     } catch (err) {
         console.log(err)
     }
