@@ -8,14 +8,14 @@ const check_date_time_reserwation = require('../services/check_date_time_reserwa
 
 
 // usuwanie rezerwacji 
-router.delete("/delete", async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
     authenticate(req, res)
-    console.log(req.params.id_reserwation)
+    console.log(req.params.id)
     try {
         const del = await db.query("DELETE FROM reserwation WHERE id=$1", [
-            req.params.id_reserwation
+            req.params.id
         ])
-        res.sendStatus(200)
+        res.status(200).send("Rezerwacja została anulowana ")
     } catch (err) {
         console.log(err)
     }
