@@ -32,7 +32,7 @@ router.get("/getAll/:id", async (req, res) => {
             req.params.id
         ])
         console.log(reserwation.rows)
-        res.status(200).send(reserwation.rows[0])
+        res.status(200).send(reserwation.rows)
     } catch (err) {
         console.log(err)
     }
