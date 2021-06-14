@@ -14,7 +14,7 @@ const check_date_time_reserwation = async (date_booking, time_booking) => {
         // if (date_booking < moment().local().format("YYYY-MM-D")) {
         //     console.log("data większa :)")
         // }
-        const response = await db.query("SELECT date_booking2, time_booking FROM reserwation WHERE id_user=1")
+        const response = await db.query("SELECT date_booking2, time_booking FROM reserwation WHERE id_user=18")
         // console.log(response.rows[0].date_booking2)
         console.log(response.rows[0])
         let data_wpisana = moment(date_booking).utc(true)
