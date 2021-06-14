@@ -39,7 +39,7 @@ router.get("/getOne/:id", async (req, res) => {
 
 // pobieranie wszystkich komentarzy dla danej restauracji 
 router.get("/getAll/:id", async (req, res) => {
-    console.log(req.params)
+    console.log(req.params.id)
 
 
     try {
