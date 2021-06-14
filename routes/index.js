@@ -11,6 +11,7 @@ const userEdit = require("./userSet/userEdit")
 const google = require("./auth/log_google")
 const facebook = require("./auth/log_fb")
 const comment = require("./endpoints/rating_comment")
+const admin = require("./endpoints/admin")
 
 const reserwation = require("./endpoints/reserwation")
 const table = require("./endpoints/table")
@@ -53,6 +54,7 @@ router.use(session({
     // cookie: { secure: true }  if https !
 }))
 
+router.use('/admin', comment)
 router.use('/comment', comment)
 router.use('/login', log)
 router.use('/google', google)
