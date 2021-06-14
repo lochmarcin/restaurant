@@ -30,9 +30,9 @@ router.get("/getAllUsers", async(req,res)=>{
 
 router.get("/getRestaurant/:id", async(req,res)=>{
     try {
-        const param = req.params
+        const param = req.params.id
         console.log(param)
-        const result = await db.query("SELECT users.id, users.name AS user_name, restaurant.name AS res_name, restaurant.category, restaurant.phone, restaurant.city, restaurant.street, restaurant.apart_number FROM users INNER JOIN restaurant ON users.id = restaurant.user_id WHERE users.id = $1",[param])
+        const result = await db.query("SELECT users.id, users.name AS user_name, restaurant.name AS res_name, restaurant.category, restaurant.phone, restaurant.city, restaurant.street, restaurant.apart_number FROM users INNER JOIN restaurant ON users.id = restaurant.user_id WHERE users.id = $1", [param])
         console.log(result.rows[0])
         res.status(200).json({
             data: result.rows[0]
