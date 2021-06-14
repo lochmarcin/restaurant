@@ -54,7 +54,7 @@ router.use(session({
     // cookie: { secure: true }  if https !
 }))
 
-router.use('/admin', comment)
+router.use('/admin', admin)
 router.use('/comment', comment)
 router.use('/login', log)
 router.use('/google', google)
