@@ -86,7 +86,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
     console.log("ID usera: " + user.rows[0].id)
     
     let restaurant = await db.query("SELECT restaurant.id AS id_rest FROM restaurant INNER JOIN users on users.id = restaurant.user_id WHERE users.id=$1",[user.rows[0].id])
-    const rest_id = restaurant.rows[0].id_rest == null ? 0 : restaurant.rows[0].id_rest
+    const rest_id = restaurant.rows[0] == null ? 0 : restaurant.rows[0].id_rest
     console.log("ID restauracji: " + id_rest)
     
     if (user.rows[0] == null)
