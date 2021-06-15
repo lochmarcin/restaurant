@@ -17,7 +17,7 @@ router.get("/getUser/:id", async(req,res)=>{
 
 router.get("/getAllUsers", async(req,res)=>{
     try {
-        const result = await db.query("SELECT users.id, users.name, users.email FROM users INNER JOIN restaurant ON restaurant.user_id != users.id GROUP BY users.id")
+        const result = await db.query("SELECT users.id, users.name, users.email , restaurant.user_id AS rest_user_id FROM users INNER JOIN restaurant ON restaurant.user_id != users.id GROUP BY users.id")
         console.log(result.rows)
         res.status(200).json({
             data: result.rows

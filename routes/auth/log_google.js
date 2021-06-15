@@ -73,6 +73,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
     audience: process.env.GOOGLE_CLIENT_ID
   });
   // const  name, email  = ticket.getPayload();
+  console.log(ticket)
   const name = ticket.getPayload();
 
   console.log(name.name)
