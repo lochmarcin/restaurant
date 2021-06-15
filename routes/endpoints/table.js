@@ -10,13 +10,16 @@ const imageProcess = require('./../services/imageProcess')
 // const dirname = require('../../dirname')
 const delete_photo = require('../services/delete_photo')
 
+const authenticate = require('../services/authenticate')
+
+
 const moment = require('moment'); // require
 moment().format();
 
 const multer = require("multer")
 const console = require('console')
 // const { delete } = require('./reserwation')
-// const { delete } = require('./reserwation')
+
 
 const storage = multer.memoryStorage()
 const upload = multer({
@@ -210,6 +213,8 @@ router.put("/update/:id", upload.single('image'), async (req, res) => {
 
 // CREATE TABLE    CREATE TABLE    
 router.post('/create', upload.single('image'), async (req, res) => {
+    authenticate(req, res)
+
     console.log('body', req.body)
     console.log('file', req.file)
 
@@ -218,7 +223,7 @@ router.post('/create', upload.single('image'), async (req, res) => {
 
     try {
         const result = await db.query("INSERT INTO tables (id_rest, numb_seats, image_url, number_table) VALUES ($1, $2, $3, $4) returning *",
-            [req.body.id_rest, req.body.numb_seats, image, req.body.number_table])
+            [req.user.rest_id, req.body.numb_seats, image, req.body.number_table])
         console.log(result.rows)
         res.status(200).json({
             status: "success",
