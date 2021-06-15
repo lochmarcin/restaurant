@@ -153,12 +153,14 @@ router.post("/getTableToday/:id", async (req, res) => {
 })
 
 // GET TABLES FROM RESTAURANT  
-router.get('/getAll/:id_rest', async (req, res) => {
+router.get('/getAll', async (req, res) => {
+    authenticate(req, res)
+
     console.log(req.body)
     console.log(req.params)
     try {
         const result = await db.query("SELECT * FROM tables WHERE id_rest = $1",
-            [req.params.id_rest])
+            [req.user.rest_id])
         console.log(result.rows)
         res.status(200).json({
             status: "success",
@@ -173,6 +175,7 @@ router.get('/getAll/:id_rest', async (req, res) => {
 
 // UPDATE TABLE     UPDATE TABLE
 router.put("/update/:id", upload.single('image'), async (req, res) => {
+
     console.log("update table")
     console.log("param: " + req.params)
     console.log("body: " + req.body)
