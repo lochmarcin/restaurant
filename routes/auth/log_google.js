@@ -84,7 +84,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
   try {
     let user = await db.query("INSERT INTO users (name, email, role) VALUES ($1, $2, $3) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [name.name, name.email, role])
     
-    let restaurant = await db.query("SELECT restaurant.id AS id_rest FROM restaurant INNER JOIN users on users.id = restaurant.user_id")
+    let restaurant = await db.query("SELECT restaurant.id AS id_rest FROM restaurant INNER JOIN users on users.id = restaurant.user_id WHERE users.id=$1",[user.rows[0].id])
     console.log(restaurant.rows[0].id_rest)
     
     console.log(user.rows[0].id)
