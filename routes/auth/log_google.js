@@ -112,6 +112,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
           id: user.rows[0].id,
           name: user.rows[0].name,
           email: user.rows[0].email,
+          rest_id : rest_id
         }
       })
     }
