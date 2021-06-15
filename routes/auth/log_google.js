@@ -138,6 +138,7 @@ router.get("/me", async (req, res) => {
 
 router.delete("/api/v1/auth/logout", async (req, res) => {
   res.cookie('JWT', null);
+  console.log(req.user)
   res.status(200).json({
     message: "Logged out successfully"
   })
