@@ -3,6 +3,9 @@ const router = express.Router()
 const db = require("../../db")
 const bad_words = require("../services/check_words")
 
+const authenticate = require('../services/authenticate')
+
+
 // const authenticate = require('../services/authenticate')
 
 
@@ -38,12 +41,14 @@ router.get("/getOne/:id", async (req, res) => {
 })
 
 // pobieranie wszystkich komentarzy dla danej restauracji 
-router.get("/getAll/:id", async (req, res) => {
+router.get("/getAll", async (req, res) => {
+    authenticate(req, res)
+
     console.log(req.params.id)
 
 
     try {
-        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1 ORDER BY date_comment DESC", [req.params.id])
+        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1 ORDER BY date_comment DESC", [req.user.rest_id])
         console.log(result.rows)
         res.status(200).json({
             status: "success",
@@ -56,6 +61,7 @@ router.get("/getAll/:id", async (req, res) => {
     }
 })
 
+// od strony użytkownik dodawanie komentarzy 
 router.post("/add/:id", async (req, res) => {
     // authenticate(req,res)
     console.log(req.body)
