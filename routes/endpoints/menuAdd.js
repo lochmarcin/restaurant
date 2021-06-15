@@ -11,6 +11,9 @@ const upload = multer({
 const imageProcess = require('./../services/imageProcess')
 const delete_photo = require('../services/delete_photo')
 
+const authenticate = require('../services/authenticate')
+
+
 
 // usuwanie jednej strony menu
 router.delete("/delete/:id", async (req, res) => {
@@ -84,11 +87,11 @@ router.get("/getOne/:id", async (req, res) => {
 })
 
 // pobieranie menu 
-router.get("/get/:id_rest", async (req, res) => {
-    console.log(req.params)
+router.get("/get", async (req, res) => {
+    authenticate(req, res)
 
     try {
-        const result = await db.query("SELECT id, page, image_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [req.params.id_rest])
+        const result = await db.query("SELECT id, page, image_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [req.user.id])
 
         console.log(result.rows)
         res.status(200).json({
