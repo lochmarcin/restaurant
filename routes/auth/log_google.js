@@ -12,9 +12,7 @@ const cookieParser = require('cookie-parser')
 const authenticate = require('../services/authenticate')
 
 
-const {
-  OAuth2Client
-} = require('google-auth-library')
+const { OAuth2Client } = require('google-auth-library')
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 // https://www.youtube.com/watch?v=hNinO6-bDVM
@@ -86,29 +84,19 @@ router.post("/api/v1/auth/google", async (req, res) => {
   try {
     let user = await db.query("INSERT INTO users (name, email, role) VALUES ($1, $2, $3) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [name.name, name.email, role])
     console.log("ID usera: " + user.rows[0].id)
-
-    let restaurant = await db.query("SELECT restaurant.id AS id_rest FROM restaurant INNER JOIN users on users.id = restaurant.user_id WHERE users.id=$1", [user.rows[0].id])
+    
+    let restaurant = await db.query("SELECT restaurant.id AS id_rest FROM restaurant INNER JOIN users on users.id = restaurant.user_id WHERE users.id=$1",[user.rows[0].id])
     const rest_id = restaurant.rows[0] == null ? 0 : restaurant.rows[0].id_rest
     console.log("ID restauracji: " + rest_id)
-
+    
     if (user.rows[0] == null)
       console.log("No user")
     else {
       const user_id = user.rows[0].id
       // req.login(user_id)
 
-      const accessToken = jwt.sign({
-        id: user_id,
-        rest_id: rest_id
-      }, process.env.TOKEN_SECRET, {
-        expiresIn: "7d"
-      })
-      const refreshToken = jwt.sign({
-        id: user_id,
-        rest_id: rest_id
-      }, process.env.REFRESH_TOKEN_SECRET, {
-        expiresIn: "30d"
-      })
+      const accessToken = jwt.sign({ id: user_id, rest_id: rest_id }, process.env.TOKEN_SECRET, { expiresIn: "7d" })
+      const refreshToken = jwt.sign({ id: user_id, rest_id: rest_id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "30d" })
 
       // const userToken = await db.query("UPDATE users SET refresh_token=$1 WHERE email=$2",[refreshToken,name.email])
 
@@ -124,7 +112,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
           id: user.rows[0].id,
           name: user.rows[0].name,
           email: user.rows[0].email,
-          rest_id: rest_id
+          rest_id : rest_id
         }
       })
     }

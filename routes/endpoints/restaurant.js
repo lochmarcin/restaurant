@@ -120,16 +120,17 @@ router.get('/getBasicInfo/:id_rest', async (req, res) => {
 
 
 // GET RESTAURANT       GET RESTAURANT 
-router.get('/get/:user_id', async (req, res) => {
-    // authenticate(req,res)
+router.get('/get', async (req, res) => {
+    authenticate(req,res)
 
     console.log(req.body)
     console.log(req.params)
     try {
         const result = await db.query("SELECT * FROM restaurant WHERE user_id = $1",
             [
-                // req.user.id
-                req.params.user_id])
+                req.user.id
+                // req.params.user_id
+            ])
         console.log(result.rows)
         res.status(200).json({
             status: "success",
@@ -143,15 +144,16 @@ router.get('/get/:user_id', async (req, res) => {
 })
 
 // UPDATE RESTAURANT      UPDATE RESTAURANT
-router.put('/update/:user_id', async (req, res) => {
-    // authenticate(req,res)
+router.put('/update', async (req, res) => {
+    authenticate(req,res)
     console.log(req.body)
     console.log(req.params)
     try {
         const result = await db.query("UPDATE restaurant SET name = $1, description = $2, category = $3, nip = $4, phone = $5, city = $6, street = $7, apart_number = $8 WHERE user_id = $9 returning *",
             [req.body.name, req.body.description, req.body.category, req.body.nip, req.body.phone, req.body.city, req.body.street, req.body.apart_number,
-            // req.user.id,
-            req.params.user_id])
+            req.user.id,
+            // req.params.user_id
+        ])
         console.log(result.rows[0])
         res.status(200).json({
             status: "success",

@@ -235,7 +235,9 @@ const getTables = async (req, res , date_booking) => {
     try {
         console.log(date_booking)
         const reserwation = await db.query("SELECT tables.id FROM tables FULL OUTER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
-            req.params.id, date_booking,
+            // reg.user.rest_id,
+            req.params.id, 
+            date_booking,
         ])
         let tables = await db.query("SELECT id, id_rest, numb_seats, number_table, image_url FROM tables WHERE id_rest=$1", [req.params.id])
 
