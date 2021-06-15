@@ -92,7 +92,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
       console.log("No user")
     else {
       const user_id = user.rows[0].id
-      const rest_id = restaurant.rows[0].id_rest
+      const rest_id = restaurant.rows[0].id_rest 
       // req.login(user_id)
 
       const accessToken = jwt.sign({ id: user_id, rest_id: rest_id }, process.env.TOKEN_SECRET, { expiresIn: "7d" })

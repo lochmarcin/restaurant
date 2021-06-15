@@ -166,7 +166,7 @@ router.put('/update/:user_id', async (req, res) => {
 
 // CREATE RESTAURANT       CREATE RESTAURANT 
 router.post('/create', upload.single('image'), async (req, res) => {
-    // authenticate(req,res)
+    authenticate(req, res)
 
     console.log('body', req.body)
     console.log('file', req.file)
@@ -176,10 +176,12 @@ router.post('/create', upload.single('image'), async (req, res) => {
     try {
         const result = await db.query("INSERT INTO restaurant (user_id, name, description, category, nip, phone, city, street, apart_number, image_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *",
             [
-                // req.user.id,
-                req.body.user_id,
+                req.user.id,
+                // req.body.user_id,
                 req.body.name, req.body.description, req.body.category, req.body.nip, req.body.phone, req.body.city, req.body.street, req.body.apart_number, image])
-        console.log(result.rows)
+        console.log(result.rows[0])
+        req.user.id_rest = result.rows[0].id
+        console.log(req.user)
         res.status(200).json({
             status: "success",
             data: {
