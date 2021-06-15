@@ -60,7 +60,7 @@ router.post("/check", async (req, res) => {
     const date_booking = `${req.body.year}-${req.body.month}-${req.body.day}`
     const time_booking = `${req.body.hour}:${req.body.min}:00`
 
-    check_date_time_reserwation(date_booking, time_booking)
+    check_date_time_reserwation(date_booking, time_booking, res)
 })
 
 // TWORZENIE REZERWACJI 
