@@ -9,7 +9,7 @@ const imageProcess = require('./../services/imageProcess')
 const menu = require("./menuAdd")
 const openTime = require("./open_time")
 
-// const authenticate = require('../services/authenticate')
+const authenticate = require('../services/authenticate')
 
 const multer = require("multer")
 
