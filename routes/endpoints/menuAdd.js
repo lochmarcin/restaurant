@@ -108,7 +108,8 @@ router.get("/get", async (req, res) => {
 
 // dodawanie menu 
 router.post("/add", upload.single('image'), async (req, res) => {
-    // upload.single('image'),
+    authenticate(req, res)
+
     console.log(req.body)
     console.log('file', req.file)
 
@@ -116,7 +117,7 @@ router.post("/add", upload.single('image'), async (req, res) => {
     console.log(image)
 
     try {
-        const result = await db.query("INSERT INTO menu_restaurant (image_url,page, id_rest) VALUES ($1,$2,$3) returning *", [image, req.body.page, req.body.id_rest])
+        const result = await db.query("INSERT INTO menu_restaurant (image_url,page, id_rest) VALUES ($1,$2,$3) returning *", [image, req.body.page, req.user.rest_id])
         console.log(result.rows)
 
 
