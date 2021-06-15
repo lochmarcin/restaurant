@@ -91,7 +91,7 @@ router.get("/get", async (req, res) => {
     authenticate(req, res)
 
     try {
-        const result = await db.query("SELECT id, page, image_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [req.user.id])
+        const result = await db.query("SELECT id, page, image_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [req.user.rest_id])
 
         console.log(result.rows)
         res.status(200).json({
