@@ -73,7 +73,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
     audience: process.env.GOOGLE_CLIENT_ID
   });
   // const  name, email  = ticket.getPayload();
-  console.log(ticket)
+  // console.log(ticket)
   const name = ticket.getPayload();
 
   console.log(name.name)
@@ -87,7 +87,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
     
     let restaurant = await db.query("SELECT restaurant.id AS id_rest FROM restaurant INNER JOIN users on users.id = restaurant.user_id WHERE users.id=$1",[user.rows[0].id])
     const rest_id = restaurant.rows[0] == null ? 0 : restaurant.rows[0].id_rest
-    console.log("ID restauracji: " + id_rest)
+    console.log("ID restauracji: " + rest_id)
     
     if (user.rows[0] == null)
       console.log("No user")
