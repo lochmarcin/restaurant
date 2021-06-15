@@ -83,16 +83,16 @@ router.post("/api/v1/auth/google", async (req, res) => {
   // moje
   try {
     let user = await db.query("INSERT INTO users (name, email, role) VALUES ($1, $2, $3) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [name.name, name.email, role])
+    console.log("ID usera: " + user.rows[0].id)
     
     let restaurant = await db.query("SELECT restaurant.id AS id_rest FROM restaurant INNER JOIN users on users.id = restaurant.user_id WHERE users.id=$1",[user.rows[0].id])
     console.log("ID restauracji: " + restaurant.rows[0].id_rest)
     
-    console.log("ID usera: " + user.rows[0].id)
     if (user.rows[0] == null)
       console.log("No user")
     else {
       const user_id = user.rows[0].id
-      const rest_id = restaurant.rows[0].id_rest 
+      const rest_id = restaurant.rows[0].id_rest == null ? null : restaurant.rows[0].id_rest
       // req.login(user_id)
 
       const accessToken = jwt.sign({ id: user_id, rest_id: rest_id }, process.env.TOKEN_SECRET, { expiresIn: "7d" })
