@@ -63,35 +63,61 @@ router.post("/check", async (req, res) => {
     check_date_time_reserwation(date_booking, time_booking, res)
 })
 
-// TWORZENIE REZERWACJI 
-router.post("/create/:id", async (req, res) => {
-    // authenticate(req, res)
+// tworznie rezerwacji przez RESTAURATORA
+router.post("/create", async (req, res) => {
+    authenticate(req, res)
 
     console.log('body', req.body)
 
+    const id_user = req.user.id_user
+    const id_user = req.user.rest_id
+
+    const date_booking = req.body.date_booking
+    const time_booking = `${req.body.hour}:${req.body.min}`
     try {
+        await reserw(req, id_user, id_rest, res)
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+// tworzenie rezerwacji przez KLIENTA
+router.post("/create/:id", async (req, res) => {
+    authenticate(req, res)
+
+    console.log('body', req.body)
+
+    const id_user = req.user.id_user
+    const id_user = req.params.id
+
+    try {
+        await reserw(req, id_user, id_rest, res)
+    } catch (error) {
+        console.log(error)
+    }
+})
+// Funkcja rezerująca ! 
+const reserw = async (req, id_user, rest_id, res) => {
+    try {
+        //     const check = await db.query("SELECT * FROM reserwation WHERE id_table = $1 AND date_booking=$2 AND time_booking >= $3 ", [
+        //         req.body.id_table, date_booking, time_booking
+        //     ])
+        //     if (check.rows[0] != null)
+        //         res.status(401).send("Stolik jest już zarezerwowany :(")
         const date_booking = req.body.date_booking
         const time_booking = `${req.body.hour}:${req.body.min}`
 
-        const check = await db.query("SELECT * FROM reserwation WHERE id_table = $1 AND date_booking=$2 AND time_booking >= $3 ", [
-            req.body.id_table, date_booking, time_booking
-        ])
-        if (check.rows[0] != null)
-            res.status(401).send("Stolik jest już zarezerwowany :(")
+        // const reserwation = await db.query("INSERT INTO reserwation (id_user, id_restaurant, id_table, time_reserwation, time_booking, date_booking, date_booking2) VALUES ($1,$2,$3,$4,$5,$6,$7)", [
 
-
-
-        const reserwation = await db.query("INSERT INTO reserwation (id_user, id_restaurant, id_table, time_reserwation, time_booking, date_booking, date_booking2) VALUES ($1,$2,$3,$4,$5,$6,$7)", [
-            // req.user.id,
-            req.params.id,
-            req.body.id_restaurant, req.body.id_table, new Date().toJSON(), time_booking, date_booking, date_booking
+        const reserwation = await db.query("INSERT INTO reserwation (id_user, id_restaurant, id_table, time_reserwation, time_booking, date_booking) VALUES ($1,$2,$3,$4,$5,$6)", [
+            id_user, rest_id, req.body.id_table, new Date().toJSON(), time_booking, date_booking
         ])
         res.status(200).send("Zarezerwowano ! :)")
 
     } catch (err) {
         console.log(err)
     }
-})
+}
 
 router.delete("/delete", async (req, res) => {
     try {
