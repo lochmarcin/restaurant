@@ -66,8 +66,10 @@ router.post("/check", async (req, res) => {
 // tworznie rezerwacji przez RESTAURATORA
 router.post("/create", async (req, res) => {
     authenticate(req, res)
+    console.log('user: ', req.user)
 
-    console.log('body', req.body)
+
+    console.log('body: ', req.body)
 
     const id_user = req.user.id
     const rest_id = req.user.rest_id
@@ -82,8 +84,10 @@ router.post("/create", async (req, res) => {
 // tworzenie rezerwacji przez KLIENTA
 router.post("/create/:id", async (req, res) => {
     authenticate(req, res)
+    console.log('user: ', req.user)
 
-    console.log('body', req.body)
+
+    console.log('body: ', req.body)
 
     const id_user = req.user.id
     const rest_id = req.params.id
