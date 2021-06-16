@@ -86,12 +86,27 @@ router.get("/getOne/:id", async (req, res) => {
     }
 })
 
-// pobieranie menu 
+// pobieranie menu KLIENT
+router.get("/get/:id", async (req, res) => {
+    try {
+        await get(req.params.id)
+    } catch (err) {
+        console.log(err)
+    }
+})
+// pobieranie menu RESTAURATOR
 router.get("/get", async (req, res) => {
     authenticate(req, res)
-
     try {
-        const result = await db.query("SELECT id, page, image_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [req.user.rest_id])
+        await get(req.user.rest_id)
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+const get = async(id_rest) => {
+    try {
+        const result = await db.query("SELECT id, page, image_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [id_rest])
 
         console.log(result.rows)
         res.status(200).json({
@@ -100,11 +115,10 @@ router.get("/get", async (req, res) => {
                 menu: result.rows,
             }
         })
-
     } catch (err) {
         console.log(err)
     }
-})
+}
 
 // dodawanie menu 
 router.post("/add", upload.single('image'), async (req, res) => {

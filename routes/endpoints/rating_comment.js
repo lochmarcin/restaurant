@@ -23,22 +23,23 @@ router.delete("/delete/:id", async (req, res) => {
     }
 })
 
-router.get("/getOne/:id", async (req, res) => {
-    console.log(req.params)
+// nie potrzebne !
+// router.get("/getOne/:id", async (req, res) => {
+//     console.log(req.params)
 
-    try {
-        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1",)
-        console.log(result.rows)
-        res.status(200).json({
-            status: "success",
-            data: {
-                comment: result.rows
-            }
-        })
-    } catch (err) {
-        console.log(err)
-    }
-})
+//     try {
+//         const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1",)
+//         console.log(result.rows)
+//         res.status(200).json({
+//             status: "success",
+//             data: {
+//                 comment: result.rows
+//             }
+//         })
+//     } catch (err) {
+//         console.log(err)
+//     }
+// })
 
 // pobieranie wszystkich komentarzy dla danej restauracji 
 router.get("/getAll/:id", async (req, res) => {
