@@ -41,14 +41,32 @@ router.get("/getOne/:id", async (req, res) => {
 })
 
 // pobieranie wszystkich komentarzy dla danej restauracji 
+router.get("/getAll/:id", async (req, res) => {
+    authenticate(req, res)
+    try {
+        console.log(req.params.id)
+        await getAll(req.params.id, res)
+    } catch (error) {
+        console.log(error)
+    }
+    
+})
+// pobieranie wszystkich komentarzy dla danej restauracji 
 router.get("/getAll", async (req, res) => {
     authenticate(req, res)
-
-    console.log(req.params.id)
-
-
     try {
-        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1 ORDER BY date_comment DESC", [req.user.rest_id])
+        console.log(req.user.rest_id)
+        await getAll(req.user.rest_id, res)
+    } catch (error) {
+        console.log(error)
+    }
+    
+})
+
+const getAll = async (rest_id , res) => {
+    try {
+
+        const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1 ORDER BY date_comment DESC", [rest_id])
         console.log(result.rows)
         res.status(200).json({
             status: "success",
@@ -59,7 +77,8 @@ router.get("/getAll", async (req, res) => {
     } catch (err) {
         console.log(err)
     }
-})
+}
+
 
 // od strony użytkownik dodawanie komentarzy 
 router.post("/add/:id", async (req, res) => {
