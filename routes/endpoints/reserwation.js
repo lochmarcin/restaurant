@@ -49,7 +49,7 @@ router.get("/get", async (req, res) => {
             req.user.id
         ])
         console.log(reserwation.rows)
-        res.status(200).send(reserwation.rows[0])
+        res.status(200).send(reserwation.rows)
     } catch (err) {
         console.log(err)
     }
