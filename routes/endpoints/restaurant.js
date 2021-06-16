@@ -93,10 +93,11 @@ router.get('/getInfo/:id_rest', async (req, res) => {
 })
 
 router.get('/getBasicInfo/:id_rest?', async (req, res) => {
+    authenticate(req, res)
 
     // KURWA SPRAWDŹ to u kilienta ! 
     
-    const id_rest = req.user.rest_id != 0 ? req.user.rest_id : req.params
+    const id_rest = req.user.rest_id != 0 ? req.user.rest_id : req.params.id_rest
     console.log(req.params)
     try {
         let rate
