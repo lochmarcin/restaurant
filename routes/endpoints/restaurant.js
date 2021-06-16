@@ -98,7 +98,7 @@ router.get('/getBasicInfo/:id_rest?', async (req, res) => {
     // KURWA SPRAWDŹ to u kilienta ! 
     
     const id_rest = req.user.rest_id != 0 ? req.user.rest_id : req.params.id_rest
-    console.log(req.params)
+    console.log(id_rest)
     try {
         let rate
         const rating = await db.query("SELECT ROUND(AVG(rating),2) AS avg FROM rating_comment WHERE id_rest=$1", [id_rest])
