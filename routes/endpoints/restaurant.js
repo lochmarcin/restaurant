@@ -93,17 +93,21 @@ router.get('/getInfo/:id_rest', async (req, res) => {
 })
 
 router.get('/getBasicInfo/:id_rest', async (req, res) => {
+
+    // KURWA SPRAWDŹ to u kilienta ! 
+    
+    const id_rest = req.user.rest_id != 0 ? req.user.rest_id : req.params
     console.log(req.params)
     try {
         let rate
-        const rating = await db.query("SELECT ROUND(AVG(rating),2) AS avg FROM rating_comment WHERE id_rest=$1", [req.params.id_rest])
+        const rating = await db.query("SELECT ROUND(AVG(rating),2) AS avg FROM rating_comment WHERE id_rest=$1", [id_rest])
         if (rating.rows[0].avg == null)
             rate = null
         else
             rate = rating.rows[0].avg
 
         console.log(rate)
-        const info = await db.query("SELECT name, image_url FROM restaurant WHERE id=$1", [req.params.id_rest])
+        const info = await db.query("SELECT name, image_url FROM restaurant WHERE id=$1", [id_rest])
         res.status(200).json({
             status: "success",
             data: {
