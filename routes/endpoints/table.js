@@ -160,7 +160,8 @@ router.get('/getAll/:id?', async (req, res) => {
     authenticate(req, res)
 
     // console.log(req.body)
-    // console.log(req.params.id)
+    console.log(req.params)
+    console.log(req.params == null)
 
     let rest_id = req.params == null ? req.user.rest_id : req.params.id
     try {
