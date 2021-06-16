@@ -3,10 +3,8 @@ Klient
 # Pobieranie po nazwie i mieście z oceną
 
 godziny otwarcia zamknięcia 
-pobieranie id restauracji
-rezerwacja na przyszszłą date
-logowanie
 
+profil pobieranie numeru telefonu - sprawdzenie poprawności 
 
 
 Restaurator
