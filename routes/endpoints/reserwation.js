@@ -69,7 +69,7 @@ router.post("/create", async (req, res) => {
 
     console.log('body', req.body)
 
-    const id_user = req.user.id_user
+    const id_user = req.user.id
     const rest_id = req.user.rest_id
 
     try {
@@ -85,7 +85,7 @@ router.post("/create/:id", async (req, res) => {
 
     console.log('body', req.body)
 
-    const id_user = req.user.id_user
+    const id_user = req.user.id
     const rest_id = req.params.id
 
     try {
