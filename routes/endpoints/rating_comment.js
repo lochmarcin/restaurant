@@ -42,7 +42,6 @@ router.get("/getOne/:id", async (req, res) => {
 
 // pobieranie wszystkich komentarzy dla danej restauracji 
 router.get("/getAll/:id", async (req, res) => {
-    authenticate(req, res)
     try {
         console.log(req.params.id)
         await getAll(req.params.id, res)
