@@ -40,13 +40,13 @@ router.get("/getAll/:id", async (req, res) => {
 })
 
 // GET INFO 1 reserwations BY ID USER
-router.get("/get/:id", async (req, res) => {
-    // authenticate(req, res)
+router.get("/get", async (req, res) => {
+    authenticate(req, res)
+
     console.log(req.params.id)
     try {
         const reserwation = await db.query("SELECT reserwation.id, users.name, restaurant.name, tables.number_table,reserwation.date_booking, reserwation.time_booking, reserwation.time_reserwation FROM reserwation INNER JOIN tables ON reserwation.id_table = tables.id INNER JOIN users ON reserwation.id_user = users.id INNER JOIN restaurant ON reserwation.id_restaurant = restaurant.id WHERE users.id=$1 AND date_booking >= CURRENT_DATE", [
-            // req.user.id,
-            req.params.id
+            req.user.id
         ])
         console.log(reserwation.rows)
         res.status(200).send(reserwation.rows[0])
