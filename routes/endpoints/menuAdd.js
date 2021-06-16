@@ -89,7 +89,7 @@ router.get("/getOne/:id", async (req, res) => {
 // pobieranie menu KLIENT
 router.get("/get/:id", async (req, res) => {
     try {
-        await get(req.params.id)
+        await get(req.params.id, res)
     } catch (err) {
         console.log(err)
     }
@@ -98,13 +98,13 @@ router.get("/get/:id", async (req, res) => {
 router.get("/get", async (req, res) => {
     authenticate(req, res)
     try {
-        await get(req.user.rest_id)
+        await get(req.user.rest_id, res)
     } catch (err) {
         console.log(err)
     }
 })
 
-const get = async(id_rest) => {
+const get = async(id_rest, res) => {
     try {
         const result = await db.query("SELECT id, page, image_url FROM menu_restaurant WHERE id_rest= $1 ORDER BY page ASC", [id_rest])
 
