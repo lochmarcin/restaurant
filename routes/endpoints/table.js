@@ -163,7 +163,7 @@ router.get('/getAll/:id?', async (req, res) => {
     console.log(req.params)
     console.log(req.params.id == null)
 
-    let rest_id = req.params == null ? req.user.rest_id : req.params.id
+    let rest_id = req.params.id == null ? req.user.rest_id : req.params.id
     try {
         const result = await db.query("SELECT * FROM tables WHERE id_rest = $1",
             [rest_id])
