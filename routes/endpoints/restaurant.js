@@ -92,16 +92,25 @@ router.get('/getInfo/:id_rest', async (req, res) => {
     }
 })
 
-router.get('/getBasicInfo/:id_rest?', async (req, res) => {
+router.get('/getBasicInfo/:id_rest', async (req, res) => {
+    try{
+        const id_rest = req.params.id_rest
+        await getInfo(id_rest,res)    
+    }catch (err) {
+        console.log(err)
+    }
+})
+router.get('/getBasicInfo', async (req, res) => {
     authenticate(req, res)
+    try{
+        const id_rest = req.user.rest_id
+        await getInfo(id_rest,res)    
+    }catch (err) {
+        console.log(err)
+    }
+})
 
-    // KURWA SPRAWDŹ to u kilienta ! 
-    // console.log("req.params.id_rest " + req.params.id_rest)
-    // console.log("req.user.rest_id == null :" + req.user.rest_id == null)
-    // console.log("req.user.rest_id == 0 :" + req.user.rest_id == 0)
-
-    const id_rest = req.params.id_rest != null ? req.params.id_rest : req.user.rest_id
-    console.log(id_rest)
+const getInfo = async (id_rest,res) => {
     try {
         let rate
         const rating = await db.query("SELECT ROUND(AVG(rating),2) AS avg FROM rating_comment WHERE id_rest=$1", [id_rest])
@@ -121,11 +130,10 @@ router.get('/getBasicInfo/:id_rest?', async (req, res) => {
             }
 
         })
-    } catch (err) {
-        console.log(err)
+    } catch (error) {
+        console.log(error)   
     }
-})
-
+}
 
 // GET RESTAURANT       GET RESTAURANT 
 router.get('/get', async (req, res) => {
