@@ -70,12 +70,10 @@ router.post("/create", async (req, res) => {
     console.log('body', req.body)
 
     const id_user = req.user.id_user
-    const id_user = req.user.rest_id
+    const rest_id = req.user.rest_id
 
-    const date_booking = req.body.date_booking
-    const time_booking = `${req.body.hour}:${req.body.min}`
     try {
-        await reserw(req, id_user, id_rest, res)
+        await reserw(req, id_user, rest_id, res)
     } catch (error) {
         console.log(error)
     }
@@ -88,10 +86,10 @@ router.post("/create/:id", async (req, res) => {
     console.log('body', req.body)
 
     const id_user = req.user.id_user
-    const id_user = req.params.id
+    const rest_id = req.params.id
 
     try {
-        await reserw(req, id_user, id_rest, res)
+        await reserw(req, id_user, rest_id, res)
     } catch (error) {
         console.log(error)
     }
