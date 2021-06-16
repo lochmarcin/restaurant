@@ -159,8 +159,9 @@ router.post("/getTableToday/:id", async (req, res) => {
 router.get('/getAll/:id?', async (req, res) => {
     authenticate(req, res)
 
-    console.log(req.body)
-    console.log(req.params)
+    // console.log(req.body)
+    console.log(req.params.id)
+
     let rest_id = req.params == null ? req.user.rest_id : req.params.id
     try {
         const result = await db.query("SELECT * FROM tables WHERE id_rest = $1",
