@@ -45,7 +45,7 @@ router.get("/get", async (req, res) => {
 
     // console.log(req.params.id)
     try {
-        const reserwation = await db.query("SELECT reserwation.id, users.name, restaurant.name, tables.number_table,reserwation.date_booking, reserwation.time_booking, reserwation.time_reserwation FROM reserwation INNER JOIN tables ON reserwation.id_table = tables.id INNER JOIN users ON reserwation.id_user = users.id INNER JOIN restaurant ON reserwation.id_restaurant = restaurant.id WHERE users.id=$1", [
+        const reserwation = await db.query("SELECT reserwation.id, users.name AS user_name, restaurant.name AS restaurant_name, tables.number_table, reserwation.date_booking, reserwation.time_booking, reserwation.time_reserwation FROM reserwation INNER JOIN tables ON reserwation.id_table = tables.id INNER JOIN users ON reserwation.id_user = users.id INNER JOIN restaurant ON reserwation.id_restaurant = restaurant.id WHERE users.id=$1", [
             req.user.id
         ])
         console.log(reserwation.rows)
