@@ -92,7 +92,7 @@ router.get('/getInfo/:id_rest', async (req, res) => {
     }
 })
 
-router.get('/getBasicInfo/:id_rest', async (req, res) => {
+router.get('/getBasicInfo/:id_rest?', async (req, res) => {
 
     // KURWA SPRAWDŹ to u kilienta ! 
     
