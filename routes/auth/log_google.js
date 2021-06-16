@@ -82,6 +82,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
 
   // moje
   try {
+    
     let user = await db.query("INSERT INTO users (name, email, role) VALUES ($1, $2, $3) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [name.name, name.email, role])
     console.log("ID usera: " + user.rows[0].id)
     
@@ -112,7 +113,8 @@ router.post("/api/v1/auth/google", async (req, res) => {
           id: user.rows[0].id,
           name: user.rows[0].name,
           email: user.rows[0].email,
-          rest_id : rest_id
+          rest_id : rest_id,
+          role :  user.rows[0].role
         }
       })
     }
