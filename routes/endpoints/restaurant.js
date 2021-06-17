@@ -46,10 +46,21 @@ router.get('/getAll', async (req, res) => {
 // GET ALL RESTAURANT BY CITY   
 router.get('/getByCity/:city', async (req, res) => {
     console.log(req.body)
-    try {
-        
 
-        const result = await db.query("SELECT * FROM restaurant WHERE city=$1", [req.params.city])
+    // SELECT DISTINCT ON (restaurant.id) restaurant.id, restaurant.user_id, restaurant.name, restaurant.description,
+    // restaurant.category,restaurant.nip,restaurant.phone,restaurant.city,
+    // restaurant.street,restaurant.apart_number,restaurant.image_url, 
+    // ROUND(AVG(rating_comment.rating),2) AS avg FROM restaurant
+    // JOIN rating_comment ON restaurant.id = rating_comment.id_rest 
+    // WHERE restaurant.city='Kraków'
+    // GROUP BY restaurant.id, restaurant.user_id, restaurant.name, restaurant.description,
+    // restaurant.category,restaurant.nip,restaurant.phone,restaurant.city,
+    // restaurant.street,restaurant.apart_number,restaurant.image_url
+
+    try {
+        const result = await db.query("SELECT DISTINCT ON (restaurant.id) restaurant.id, restaurant.user_id, restaurant.name,restaurant.description,restaurant.category,restaurant.nip,restaurant.phone,restaurant.city,restaurant.street,restaurant.apart_number,restaurant.image_url, ROUND(AVG(rating_comment.rating),2) AS avg FROM restaurant JOIN rating_comment ON restaurant.id = rating_comment.id_rest WHERE restaurant.city=$1 GROUP BY restaurant.id, restaurant.user_id, restaurant.name, restaurant.description, restaurant.category,restaurant.nip,restaurant.phone,restaurant.city, restaurant.street,restaurant.apart_number,restaurant.image_url", [req.params.city])
+
+        // const result = await db.query("SELECT * FROM restaurant WHERE city=$1", [req.params.city])
         console.log(result.rows)
         res.status(200).json({
             status: "success",
@@ -95,24 +106,24 @@ router.get('/getInfo/:id_rest', async (req, res) => {
 })
 
 router.get('/getBasicInfo/:id_rest', async (req, res) => {
-    try{
+    try {
         const id_rest = req.params.id_rest
-        await getInfo(id_rest,res)    
-    }catch (err) {
+        await getInfo(id_rest, res)
+    } catch (err) {
         console.log(err)
     }
 })
 router.get('/getBasicInfo', async (req, res) => {
     authenticate(req, res)
-    try{
+    try {
         const id_rest = req.user.rest_id
-        await getInfo(id_rest,res)    
-    }catch (err) {
+        await getInfo(id_rest, res)
+    } catch (err) {
         console.log(err)
     }
 })
 
-const getInfo = async (id_rest,res) => {
+const getInfo = async (id_rest, res) => {
     try {
         let rate
         const rating = await db.query("SELECT ROUND(AVG(rating),2) AS avg FROM rating_comment WHERE id_rest=$1", [id_rest])
@@ -133,13 +144,13 @@ const getInfo = async (id_rest,res) => {
 
         })
     } catch (error) {
-        console.log(error)   
+        console.log(error)
     }
 }
 
 // GET RESTAURANT       GET RESTAURANT 
 router.get('/get', async (req, res) => {
-    authenticate(req,res)
+    authenticate(req, res)
 
     console.log(req.body)
     console.log(req.params)
@@ -163,15 +174,15 @@ router.get('/get', async (req, res) => {
 
 // UPDATE RESTAURANT      UPDATE RESTAURANT
 router.put('/update', async (req, res) => {
-    authenticate(req,res)
+    authenticate(req, res)
     console.log(req.body)
     console.log(req.params)
     try {
         const result = await db.query("UPDATE restaurant SET name = $1, description = $2, category = $3, nip = $4, phone = $5, city = $6, street = $7, apart_number = $8 WHERE user_id = $9 returning *",
             [req.body.name, req.body.description, req.body.category, req.body.nip, req.body.phone, req.body.city, req.body.street, req.body.apart_number,
             req.user.id,
-            // req.params.user_id
-        ])
+                // req.params.user_id
+            ])
         console.log(result.rows[0])
         res.status(200).json({
             status: "success",

@@ -32,8 +32,9 @@ const check_date_time_reserwation = async (date_booking, time_booking, res) => {
                 console.log(diff)
                 console.log(time_baza_open > time_wpisana)
                 console.log(time_baza_close <= time_wpisana)
-                console.log(time_baza_open > time_wpisana && time_wpisana >= "00:00")
+                console.log(time_baza_open < time_wpisana && time_wpisana >= "00:00")
                 console.log(time_baza_close <= time_wpisana && time_wpisana <= "00:00")
+
                 if (response.rows[0].mon_open == "00:00" && response.rows[0].mon_close == "00:00")
                     res.status(300).send("Restauracja w ten dzień jest zamknięta")
                 else if (diff < 60 && diff > 0)
