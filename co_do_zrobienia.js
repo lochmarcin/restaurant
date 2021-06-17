@@ -1,10 +1,14 @@
-Klient
-# usuwanie zdjęć podczas update w restauracji, menu - kopiuj z table delete
-# Pobieranie po nazwie i mieście z oceną
 
 godziny otwarcia zamknięcia 
 
 profil pobieranie numeru telefonu - sprawdzenie poprawności 
+
+rezerwacjie godziny dziwne !
+
+rezerwacjie tworzenie z parametrem i bez 
+przykład tables/getAll/:id?
+
+
 
 
 Restaurator

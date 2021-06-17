@@ -47,6 +47,8 @@ router.get('/getAll', async (req, res) => {
 router.get('/getByCity/:city', async (req, res) => {
     console.log(req.body)
     try {
+        
+
         const result = await db.query("SELECT * FROM restaurant WHERE city=$1", [req.params.city])
         console.log(result.rows)
         res.status(200).json({
