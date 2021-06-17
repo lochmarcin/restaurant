@@ -104,6 +104,24 @@ router.post("/getByDate/:id", async (req,res)=>{
         console.log(err)
     }
 })
+
+router.post("/getTableToday", async (req, res) => {
+    authenticate(req,res)
+    console.log(req.body)
+
+    try {
+ 
+        let date_booking = moment().local().format("YYYY-MM-D")
+
+        console.log("date_booking: " + date_booking)
+
+        await getTables(req, res , date_booking)
+
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 // wyślij tylko te które są dostępne na konkretny dzień
 // GET rezerwacje z konkretnej daty oraz restauracji 
 router.post("/getTableToday/:id", async (req, res) => {
@@ -244,13 +262,18 @@ router.post('/create', upload.single('image'), async (req, res) => {
 const getTables = async (req, res , date_booking) => {
 
     try {
+        const rest_id = req.params.id == null ? req.user.rest_id : req.params.id
+
         console.log(date_booking)
         const reserwation = await db.query("SELECT tables.id FROM tables FULL OUTER JOIN reserwation ON reserwation.id_table = tables.id WHERE tables.id_rest=$1 AND reserwation.date_booking = $2", [
-            // reg.user.rest_id,
-            req.params.id, 
+            rest_id,
+            // req.params.id, 
             date_booking,
         ])
-        let tables = await db.query("SELECT id, id_rest, numb_seats, number_table, image_url FROM tables WHERE id_rest=$1", [req.params.id])
+        let tables = await db.query("SELECT id, id_rest, numb_seats, number_table, image_url FROM tables WHERE id_rest=$1", [
+            // req.params.id
+            rest_id
+        ])
 
         console.log("Rezerwacji: " + reserwation.rows.length)
         console.log("Stolików: " + tables.rows.length)
