@@ -25,28 +25,7 @@ const bodyParser = require("body-parser")
 const cookieSession = require('cookie-session')
 
 
-
-
-
 const User = require('../../schema/userModel')
-
-
-
-// function loginSignin(app) { 
-// router.use(session({
-//     secret: "secretcode",
-//     resave: true,
-//     saveUninitialized: true
-// }))
-// // app.use(cookieParser("secretcode"))
-
-// router.use(passport.initialize())
-// router.use(passport.session())
-// // require('./passportConfig')(passport)
-
-
-
-
 
 
 // Routes
@@ -93,11 +72,4 @@ router.post("/zarejestrujsie", (req, res) => {
 })
 
 
-router.post("/user", (req, res) => {
-    res.send("jesteś w userze")
-})
-
-router.use('/', (req, res) => res.send("jesteś w loginach"))
-// }
-// module.exports = loginSignin
 module.exports = router
