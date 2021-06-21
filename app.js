@@ -5,12 +5,6 @@ const routes = require('./routes/index');
 
 const app = express();
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(cookieParser("secretcode"))
-
-
-
 app.use('/', routes)
 
 module.exports = app

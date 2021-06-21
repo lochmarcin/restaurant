@@ -3,7 +3,7 @@ const router = express.Router()
 const db = require("../../db")
 
 const bodyParser = require("body-parser")
-const Restaurant = require('../../schema/restaurantSchema')
+// const Restaurant = require('../../schema/restaurantSchema')
 
 const imageProcess = require('./../services/imageProcess')
 const menu = require("./menuAdd")
@@ -47,15 +47,6 @@ router.get('/getAll', async (req, res) => {
 router.get('/getByCity/:city', async (req, res) => {
     console.log(req.body)
 
-    // SELECT DISTINCT ON (restaurant.id) restaurant.id, restaurant.user_id, restaurant.name, restaurant.description,
-    // restaurant.category,restaurant.nip,restaurant.phone,restaurant.city,
-    // restaurant.street,restaurant.apart_number,restaurant.image_url, 
-    // ROUND(AVG(rating_comment.rating),2) AS avg FROM restaurant
-    // JOIN rating_comment ON restaurant.id = rating_comment.id_rest 
-    // WHERE restaurant.city='Kraków'
-    // GROUP BY restaurant.id, restaurant.user_id, restaurant.name, restaurant.description,
-    // restaurant.category,restaurant.nip,restaurant.phone,restaurant.city,
-    // restaurant.street,restaurant.apart_number,restaurant.image_url
 
     try {
         const result = await db.query("SELECT DISTINCT ON (restaurant.id) restaurant.id, restaurant.user_id, restaurant.name,restaurant.description,restaurant.category,restaurant.nip,restaurant.phone,restaurant.city,restaurant.street,restaurant.apart_number,restaurant.image_url, ROUND(AVG(rating_comment.rating),2) AS avg FROM restaurant JOIN rating_comment ON restaurant.id = rating_comment.id_rest WHERE restaurant.city=$1 GROUP BY restaurant.id, restaurant.user_id, restaurant.name, restaurant.description, restaurant.category,restaurant.nip,restaurant.phone,restaurant.city, restaurant.street,restaurant.apart_number,restaurant.image_url", [req.params.city])
@@ -180,7 +171,7 @@ router.put('/update', async (req, res) => {
     try {
         const result = await db.query("UPDATE restaurant SET name = $1, description = $2, category = $3, nip = $4, phone = $5, city = $6, street = $7, apart_number = $8 WHERE user_id = $9 returning *",
             [req.body.name, req.body.description, req.body.category, req.body.nip, req.body.phone, req.body.city, req.body.street, req.body.apart_number,
-            req.user.id,
+                req.user.id,
                 // req.params.user_id
             ])
         console.log(result.rows[0])
@@ -206,10 +197,7 @@ router.post('/create', upload.single('image'), async (req, res) => {
     console.log(image)
     try {
         const result = await db.query("INSERT INTO restaurant (user_id, name, description, category, nip, phone, city, street, apart_number, image_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *",
-            [
-                req.user.id,
-                // req.body.user_id,
-                req.body.name, req.body.description, req.body.category, req.body.nip, req.body.phone, req.body.city, req.body.street, req.body.apart_number, image])
+            [req.user.id,req.body.name, req.body.description, req.body.category, req.body.nip, req.body.phone, req.body.city, req.body.street, req.body.apart_number, image])
         console.log(result.rows[0])
         req.user.id_rest = result.rows[0].id
         console.log(req.user)

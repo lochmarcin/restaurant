@@ -1,11 +1,10 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const router = express.Router()
 const db = require("../../db")
 const fs = require('fs')
 
 const bodyParser = require("body-parser")
-const Restaurant = require('../../schema/restaurantSchema')
+// const Restaurant = require('../../schema/restaurantSchema')
 const imageProcess = require('./../services/imageProcess')
 // const dirname = require('../../dirname')
 const delete_photo = require('../services/delete_photo')

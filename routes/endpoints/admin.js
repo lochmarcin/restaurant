@@ -27,7 +27,7 @@ router.get("/getAllUsers", async(req,res)=>{
         console.log(error)
     }
 })
-//  usuwanie restauracjin i wszystkiego 
+//  usuwanie restauracji i wszystkiego 
 router.delete("/DeleteUser/:id", async(req,res)=>{
     try {
         const param = req.params.id

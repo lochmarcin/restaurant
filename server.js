@@ -1,9 +1,8 @@
 require('dotenv').config({ path: '.env' })
 const app = require('./app')
 const express = require('express')
-const db = require("./db")
-const cors = require('cors')
 
+const cors = require('cors')
 
 app.use(cors({
     origin: process.env.URL_FRONT,
