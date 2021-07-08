@@ -1,68 +1,21 @@
 const express = require('express')
 const router = express.Router()
-const cors = require("cors")
 const bodyParser = require("body-parser")
-const passport = require("passport")
-const cookieSession = require('cookie-session')
-require('./passport-setup')
 const db = require("../../db")
 const jwt = require('jsonwebtoken')
-const cookieParser = require('cookie-parser')
+
 
 const authenticate = require('../services/authenticate')
+
+router.use(bodyParser.urlencoded({
+  extended: true
+}))
 
 
 const {
   OAuth2Client
 } = require('google-auth-library')
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
-
-// https://www.youtube.com/watch?v=hNinO6-bDVM
-// https://www.youtube.com/watch?v=gTowbsNPp9I
-
-router.use(cors())
-
-router.use(bodyParser.urlencoded({
-  extended: true
-}))
-
-router.use(bodyParser.json())
-
-// router.use(cookieSession({
-//   name: 'g-session',
-//   keys: ['key1', 'key2']
-// }))
-
-// const isLogin = (req, res, next) => {
-//   if (req.user)
-//     next()
-//   else {
-//     res.sendStatus(401)
-//   }
-// }
-
-
-// router.use(passport.initialize());
-// router.use(passport.session());
-
-// router.use(async (req, res, next) => {
-//   try {
-//     const user = await db.query("SELECT * FROM users WHERE id=$1", [req.session.userId])
-//     req.user = user.rows[0]
-//     next()
-//   } catch (error) {
-//     console.log(error)
-//   }
-//   // const user = await db.user.findFirst({ where: { id: req.session.userId } })
-// })
-
-
-// router.get('/', (req, res) => res.send("You aren't logged in"))
-// router.get('/good', isLogin, (req, res) => {
-//   res.send(no elo ${req.user.id}, ${req.user.displayName}, ${req.user.emails[0].value})
-//   // console.log(req.user)
-// })
-
 
 
 router.post("/api/v1/auth/google", async (req, res) => {
@@ -74,15 +27,12 @@ router.post("/api/v1/auth/google", async (req, res) => {
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID
     });
-    // const  name, email  = ticket.getPayload();
-    // console.log(ticket)
+
     const name = await ticket.getPayload();
 
     console.log(name.name)
     console.log(name.email)
 
-
-    // moje
 
 
     let user = await db.query("INSERT INTO users (name, email, role) VALUES ($1, $2, $3) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name returning *", [name.name, name.email, role])
@@ -96,7 +46,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
       console.log("No user")
     else {
       const user_id = user.rows[0].id
-      // req.login(user_id)
+
 
       const accessToken = jwt.sign({
         id: user_id,
@@ -111,9 +61,7 @@ router.post("/api/v1/auth/google", async (req, res) => {
         expiresIn: "30d"
       })
 
-      // const userToken = await db.query("UPDATE users SET refresh_token=$1 WHERE email=$2",[refreshToken,name.email])
-
-      // IF COOKIE :)
+      // Cookie 
       res.cookie('JWT', accessToken, {
         maxAge: 86400000,
         httpOnly: true
@@ -154,7 +102,6 @@ router.get("/me", async (req, res) => {
 })
 
 router.delete("/api/v1/auth/logout", async (req, res) => {
-  // await res.user
   res.cookie('JWT', null);
 
   console.log(req.user)

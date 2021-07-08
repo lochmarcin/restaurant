@@ -57,35 +57,6 @@ router.post('/add/:id', async (req, res) => {
     const id_rest = 1
     //req.body.id
 
-    // ALTER TABLE public.open_time
-    // DROP COLUMN mon_open,
-    // DROP COLUMN mon_close,
-    // DROP COLUMN tue_open,
-    // DROP COLUMN tue_close,
-    // DROP COLUMN wed_open,
-    // DROP COLUMN wed_close,
-    // DROP COLUMN thu_open,
-    // DROP COLUMN thu_close,
-    // DROP COLUMN fri_open,
-    // DROP COLUMN fri_close,
-    // DROP COLUMN sat_open,
-    // DROP COLUMN sat_close,
-    // DROP COLUMN sun_open,
-    // DROP COLUMN sun_close,
-    //     ADD COLUMN mon_open character varying,
-    //     ADD COLUMN mon_close character varying,
-    //     ADD COLUMN tue_open character varying,
-    //     ADD COLUMN tue_close character varying,
-    //     ADD COLUMN wed_open character varying,
-    //     ADD COLUMN wed_close character varying,
-    //     ADD COLUMN thu_open character varying,
-    //     ADD COLUMN thu_close character varying,
-    //     ADD COLUMN fri_open character varying,
-    //     ADD COLUMN fri_close character varying,
-    //     ADD COLUMN sat_open character varying,
-    //     ADD COLUMN sat_close character varying,
-    //     ADD COLUMN sun_open character varying,
-    //     ADD COLUMN sun_close character varying
 
 
     let time = { mon_open, mon_close, tue_open, tue_close, wed_open, wed_close, thu_open, thu_close, fri_open, fri_close, sat_open, sat_close, sun_open, sun_close } = req.body

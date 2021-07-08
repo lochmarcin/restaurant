@@ -6,7 +6,6 @@ const bad_words = require("../services/check_words")
 const authenticate = require('../services/authenticate')
 
 
-// const authenticate = require('../services/authenticate')
 
 
 router.delete("/delete/:id", async (req, res) => {
@@ -49,7 +48,7 @@ router.get("/getAll/:id", async (req, res) => {
     } catch (error) {
         console.log(error)
     }
-    
+
 })
 // pobieranie wszystkich komentarzy dla danej restauracji 
 router.get("/getAll", async (req, res) => {
@@ -60,10 +59,10 @@ router.get("/getAll", async (req, res) => {
     } catch (error) {
         console.log(error)
     }
-    
+
 })
 
-const getAll = async (rest_id , res) => {
+const getAll = async (rest_id, res) => {
     try {
 
         const result = await db.query("SELECT * FROM rating_comment WHERE id_rest=$1 ORDER BY date_comment DESC", [rest_id])
